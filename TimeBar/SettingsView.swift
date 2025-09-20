@@ -9,34 +9,36 @@ import SwiftUI
 
 
 
-// --- 辅助视图，用来监听窗口关闭 (保持不变) ---
-struct WindowCloseObserver: NSViewRepresentable {
+
+struct WindowConfigurator: NSViewRepresentable {
     func makeNSView(context: Context) -> NSView {
         let view = NSView()
         DispatchQueue.main.async {
             if let window = view.window {
+                // Force the modern unified title bar/toolbar style
+                window.styleMask.insert(.unifiedTitleAndToolbar)
+                
+                // Tell the system NOT to save this window's state upon quitting.
+                window.isRestorable = false
+                
+                // Set up the observer to handle closing the window
                 NotificationCenter.default.addObserver(
                     forName: NSWindow.willCloseNotification, object: window, queue: .main
                 ) { _ in
                     NSApp.setActivationPolicy(.accessory)
                     TimeBarModel.shared.isSettingsWindowOpen = false
-                                        
-                                        // (可选) 添加一个打印语句，方便您在控制台确认逻辑是否被执行
-                                        print("Settings window closed. isSettingsWindowOpen set to: \(TimeBarModel.shared.isSettingsWindowOpen)")
-                                
                 }
             }
         }
         return view
     }
+    
     func updateNSView(_ nsView: NSView, context: Context) {}
-                        
 }
 
-
-// --- 1. 为我们的导航标签创建一个枚举 ---
 enum SettingsTab: Hashable {
     case general
+    case time
     case appearance
 }
 
@@ -53,6 +55,8 @@ struct SettingsView: View {
             case .general:
                 // 您也可以在这里使用本地化键 LocalizedStringKey("settings.tab.general")
                 return "General"
+            case .time:
+                return "Time Zone"
             case .appearance:
                 return "Appearance"
             case .none:
@@ -70,13 +74,15 @@ struct SettingsView: View {
                     .tag(SettingsTab.general)
                     .padding(.vertical, 2)
                 
+                Label("Time Zone", systemImage: "clock")
+                    .tag(SettingsTab.time)
+                    .padding(.vertical, 2)
                 Label("Appearance", systemImage: "paintbrush")
                     .tag(SettingsTab.appearance)
                     .padding(.vertical, 2)
             }
             .listStyle(.sidebar)
             .frame(minWidth: 160, maxWidth: 250)
-            .background(Color(NSColor.controlBackgroundColor))
             .scrollContentBackground(.hidden)
             
         } detail: {
@@ -85,8 +91,12 @@ struct SettingsView: View {
             switch selectedTab {
             case .general:
                 GeneralSettingsView(settings: settings)
+            case .time:
+                TimeZoneSettingsView(settings: settings)
             case .appearance:
-                AppearanceSettingsView(settings: settings)
+                Text("Appearance settings will go here.")
+                    .foregroundColor(.secondary)
+                    .font(.title2)
             case .none:
                 Text("Select a category")
                     .foregroundColor(.secondary)
@@ -94,8 +104,7 @@ struct SettingsView: View {
             }
         }
         .navigationTitle(navigationTitle)
-        .frame(width: 550, height: 360) // 更紧凑的窗口尺寸，类似AirBattery
-        .background(WindowCloseObserver()) // 窗口关闭逻辑保持不变
+        .background(WindowConfigurator()) // 窗口关闭逻辑保持不变
     }
 }
 
@@ -192,7 +201,7 @@ struct GeneralSettingsView: View {
 
 
 // --- 3. 将"外观"设置项拆分成独立的子视图 ---
-struct AppearanceSettingsView: View {
+struct TimeZoneSettingsView: View {
     @ObservedObject var settings: UserSettings
     let allTimeZones = TimeZone.knownTimeZoneIdentifiers
 

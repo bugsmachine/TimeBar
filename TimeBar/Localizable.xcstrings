@@ -123,6 +123,9 @@
         }
       }
     },
+    "Appearance settings will go here." : {
+
+    },
     "Check for Updates…" : {
       "localizations" : {
         "zh-Hans" : {
@@ -250,6 +253,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "显示时差"
+          }
+        }
+      }
+    },
+    "Time Zone" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "时区"
           }
         }
       }

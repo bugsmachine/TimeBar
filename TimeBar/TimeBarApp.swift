@@ -57,7 +57,7 @@ struct TimeBarApp: App {
                 }
                 // 我们还可以对这个窗口组应用一些默认的窗口设置
 //                .windowStyle(.hiddenTitleBar) // 隐藏标题，让它更像一个设置面板
-//                .windowResizability(.contentSize)
+
     }
 }
 

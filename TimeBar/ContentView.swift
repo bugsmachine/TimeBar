@@ -30,16 +30,6 @@ struct ContentView: View {
                             NSApp.activate(ignoringOtherApps: true)
                         }
             
-//            Button("Settings...") {
-//                // 1. 切换模式，显示Dock图标
-//                NSApp.setActivationPolicy(.regular)
-//                
-//                // 2. 打开设置窗口
-//                openSettings()
-//                
-//                // 3. 激活App，确保窗口在最前
-//                NSApp.activate(ignoringOtherApps: true)
-//            }
             
             Button("Settings...") {
                 if timeBarModel.isSettingsWindowOpen {
