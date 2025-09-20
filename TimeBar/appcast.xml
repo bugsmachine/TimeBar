@@ -3,10 +3,10 @@
     <channel>
         <title>TimeBar</title>
         <item>
-            <title>0.1.1</title>
-            <pubDate>Sat, 20 Sep 2025 23:32:15 +0100</pubDate>
-            <sparkle:version>2</sparkle:version>
-            <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
+            <title>0.1.2</title>
+            <pubDate>Sat, 20 Sep 2025 23:42:28 +0100</pubDate>
+            <sparkle:version>3</sparkle:version>
+            <sparkle:shortVersionString>0.1.2</sparkle:shortVersionString>
             <description><![CDATA[
                             <h3>界面优化与重构</h3>
                             <ul>
@@ -18,7 +18,7 @@
                             </ul>
                         ]]></description>
             <sparkle:minimumSystemVersion>14.1</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/bugsmachine/TimeBar/releases/download/v0.1.1/TimeBar.zip" length="3205344" type="application/octet-stream" sparkle:edSignature="R9+AHixB/sz/yzZARgeEtMC6qrkxq0MpSzaG/2w70yI3R+jWZQG8XwWYCiBU6p96u5n3oBxs7Y5sMmvVJNioDQ=="/>
+            <enclosure url="https://raw.githubusercontent.com/bugsmachine/TimeBar/refs/heads/main/TimeBar/TimeBar.zip" length="3206074" type="application/octet-stream" sparkle:edSignature="Vz/q0v2nR8K20WpnS0OQXK3KCMgH31bQp8/mKdl5TFLL+bOuyzfzeBAsvay5uuchgpOWuULDPiJa3nCu027MCQ=="/>
         </item>
     </channel>
 </rss>

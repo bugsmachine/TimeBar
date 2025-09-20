@@ -133,7 +133,14 @@
 
     },
     "Check for Updates..." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查更新…"
+          }
+        }
+      }
     },
     "Check for Updates…" : {
       "localizations" : {
@@ -183,7 +190,14 @@
       }
     },
     "Launch at Login" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开机自启动"
+          }
+        }
+      }
     },
     "Quit TimeBar" : {
       "localizations" : {
@@ -260,7 +274,14 @@
       }
     },
     "Show Settings Window at Startup" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启动时打开弹窗"
+          }
+        }
+      }
     },
     "Show Time Difference" : {
       "localizations" : {
@@ -273,7 +294,14 @@
       }
     },
     "Startup Settings" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开机设置"
+          }
+        }
+      }
     },
     "Time Zone" : {
       "localizations" : {
@@ -307,7 +335,14 @@
       }
     },
     "TimeBar Settings" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "啊啊啊伤心啊"
+          }
+        }
+      }
     },
     "TimeBar v1.6.3" : {
 
