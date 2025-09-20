@@ -4,8 +4,8 @@
         <title>TimeBar</title>
         <item>
             <title>0.1.3</title>
-            <pubDate>Sun, 21 Sep 2025 00:11:34 +0100</pubDate>
-            <sparkle:version>4</sparkle:version>
+            <pubDate>Sun, 21 Sep 2025 00:30:27 +0100</pubDate>
+            <sparkle:version>5</sparkle:version>
             <sparkle:shortVersionString>0.1.3</sparkle:shortVersionString>
             <description><![CDATA[
                             <h3>界面优化与重构</h3>
@@ -16,10 +16,11 @@
                                 <li>更新了按钮样式，使其更符合原生 macOS 的设计规范。</li>
                                 <li>调整了设置窗口的默认宽度，提高了内容的可读性和操作舒适度。</li>
                                 <li>Test</li>
+                                <li>Test</li>
                             </ul>
                         ]]></description>
             <sparkle:minimumSystemVersion>14.1</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/bugsmachine/TimeBar/releases/download/v0.1.3/TimeBar.zip" length="3206152" type="application/octet-stream" sparkle:edSignature="5ey19SlPN4NBtBnIhrfSFzbtfxsGvHggXVvvFoiyGy8Tgyjt0DKCGbpN74s3jx43t2UkL19p6rGXvvRsbAAADQ=="/>
+            <enclosure url="https://github.com/bugsmachine/TimeBar/releases/download/v0.1.3/TimeBar.zip" length="3206223" type="application/octet-stream" sparkle:edSignature="kHqhFoyWE7mPQtqJFv3SC6L4wQKZyFtQkMIckmtkA6Py9aNXzWFbDE0+4ozlL/Bzjh7RlznCzfokDpXhvkqICw=="/>
         </item>
     </channel>
 </rss>
