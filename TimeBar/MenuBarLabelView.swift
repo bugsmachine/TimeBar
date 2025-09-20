@@ -14,7 +14,6 @@ struct MenuBarLabelView: View {
     @State private var timeDifference: String = ""
 
     var body: some View {
-        // 方案1：使用纯Text + SF Symbol字符
         Text(buildMenuBarTextWithSymbols())
             .font(.system(.body, design: .monospaced))
             .foregroundColor(.primary)
@@ -25,18 +24,18 @@ struct MenuBarLabelView: View {
             .onReceive(timer) { _ in
                 updateMenuBar()
             }
-            .onChange(of: settings.timeZoneIdentifier) { _ in
-                print("TimeZone changed to: \(settings.timeZoneIdentifier)")
-                updateMenuBar()
-            }
-            .onChange(of: settings.showFlag) { _ in
-                print("ShowFlag changed to: \(settings.showFlag)")
-                updateMenuBar()
-            }
-            .onChange(of: settings.showTimeDifference) { _ in
-                print("ShowTimeDifference changed to: \(settings.showTimeDifference)")
-                updateMenuBar()
-            }
+            .onChange(of: settings.timeZoneIdentifier) {
+                        print("TimeZone changed to: \(settings.timeZoneIdentifier)")
+                        updateMenuBar()
+                    }
+                    .onChange(of: settings.showFlag) {
+                        print("ShowFlag changed to: \(settings.showFlag)")
+                        updateMenuBar()
+                    }
+                    .onChange(of: settings.showTimeDifference) {
+                        print("ShowTimeDifference changed to: \(settings.showTimeDifference)")
+                        updateMenuBar()
+                    }
     }
     
     private func buildMenuBarTextWithSymbols() -> String {
@@ -84,9 +83,12 @@ struct MenuBarLabelView: View {
 
         // 3. 更新前缀 (国旗或地区名称)
         if settings.showFlag {
-            self.prefix = countryFlag(for: settings.timeZoneIdentifier) ?? "🌍"
+            if let countryCode = timeZoneToCountryCode[settings.timeZoneIdentifier] {
+                self.prefix = countryCodeToFlag(countryCode)
+            } else {
+                self.prefix = "🌍"
+            }
         } else {
-            // 不显示国旗时，显示地区名称
             self.prefix = extractCityName(from: settings.timeZoneIdentifier)
         }
 
@@ -118,22 +120,13 @@ struct MenuBarLabelView: View {
         return timeZoneIdentifier
     }
 
-    private func countryFlag(for timeZoneIdentifier: String) -> String? {
-        // ... 这个函数保持不变 ...
-        guard let countryCode = timeZoneIdentifier.split(separator: "/").first.map(String.init) else { return nil }
-        
-        let specialCases: [String: String] = [
-            "America": "US", "Europe": "EU", "Asia": ""
-        ]
-        
-        let code = specialCases[countryCode] ?? countryCode
-
+    private func countryCodeToFlag(_ countryCode: String) -> String {
         let base: UInt32 = 127397
         var s = ""
-        for v in code.unicodeScalars {
+        for v in countryCode.unicodeScalars {
             s.unicodeScalars.append(UnicodeScalar(base + v.value)!)
         }
-        return s.isEmpty ? "🌍" : s
+        return s
     }
 }
 

@@ -15,23 +15,46 @@ internal import Combine
 
 struct ContentView: View {
     @Environment(\.openSettings) private var openSettings
+    @Environment(\.openWindow) private var openWindow
+    @StateObject private var timeBarModel = TimeBarModel.shared // 保持对 Model 的引用
+
     let updater: SPUUpdater
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
+            Button("About TimeBar") {
+                            // “关于”面板也需要 App 处于激活状态才能显示
+                            NSApp.setActivationPolicy(.regular)
+                            // 调用系统标准的“关于”面板
+                            NSApp.orderFrontStandardAboutPanel(nil)
+                            NSApp.activate(ignoringOtherApps: true)
+                        }
+            
+//            Button("Settings...") {
+//                // 1. 切换模式，显示Dock图标
+//                NSApp.setActivationPolicy(.regular)
+//                
+//                // 2. 打开设置窗口
+//                openSettings()
+//                
+//                // 3. 激活App，确保窗口在最前
+//                NSApp.activate(ignoringOtherApps: true)
+//            }
             
             Button("Settings...") {
-                // 1. 切换模式，显示Dock图标
+                if timeBarModel.isSettingsWindowOpen {
+                    // 如果窗口已经打开，直接激活它
+                    NSApp.activate(ignoringOtherApps: true)
+                    return
+                }
                 NSApp.setActivationPolicy(.regular)
-                
-                // 2. 打开设置窗口
-                openSettings()
-                
-                // 3. 激活App，确保窗口在最前
+                openWindow(id: "settings-window") // 通过 ID 打开 WindowGroup
                 NSApp.activate(ignoringOtherApps: true)
-            }
+                timeBarModel.isSettingsWindowOpen = true // 更新状态
+          }
             
             Divider()
+            
 
             CheckForUpdatesView(updater: updater)
 

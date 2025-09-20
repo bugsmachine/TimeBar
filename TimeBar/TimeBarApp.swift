@@ -41,24 +41,23 @@ struct TimeBarApp: App {
                 .environmentObject(userSettings)
         }
 
-        Settings {
-            SettingsView(settings: userSettings)
-                .onAppear {
-                    // 当设置窗口出现时，切换到regular模式并激活应用
-                    NSApp.setActivationPolicy(.regular)
-                    NSApp.activate(ignoringOtherApps: true)
-
-
-                    // Workaround for activation issues: toggle focus to Dock and back
-                    if let dockApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.dock").first {
-                        dockApp.activate(options: [])
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                            NSApp.setActivationPolicy(.regular)
-                            NSApp.activate(ignoringOtherApps: true)
-                        }
-                    }
+//        Settings {
+//            SettingsView(settings: userSettings)
+//                .onAppear {
+//                    // 当设置窗口出现时，切换到regular模式并激活应用
+//                    NSApp.setActivationPolicy(.regular)
+//                    NSApp.activate(ignoringOtherApps: true)
+//
+//
+////
+//                }
+//}
+        WindowGroup(id: "settings-window") {
+                    SettingsView(settings: userSettings)
                 }
-}
+                // 我们还可以对这个窗口组应用一些默认的窗口设置
+//                .windowStyle(.hiddenTitleBar) // 隐藏标题，让它更像一个设置面板
+//                .windowResizability(.contentSize)
     }
 }
 

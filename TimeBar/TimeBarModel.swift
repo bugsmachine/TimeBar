@@ -30,15 +30,42 @@ enum AppLanguage: String, CaseIterable {
     }
 }
 
+
+
+
 // 语言管理器
 // 简易语言管理器占位实现，避免编译错误
 final class LanguageManager {
     static let shared = LanguageManager()
     private init() {}
     func setLanguage(_ language: AppLanguage) {
-        // TODO: 实际切换语言逻辑（如 LocalizedStringKey/Bundle 方案）
-        // 目前作为占位，无副作用
+        let defaults = UserDefaults.standard
+                
+                if language == .system {
+                    // 如果是“跟随系统”，则移除自定义设置
+                    defaults.removeObject(forKey: "AppleLanguages")
+                } else {
+                    defaults.set([language.rawValue], forKey: "AppleLanguages")
+                }
+                
+                // UserDefaults 的更改可能不会立即同步，强制同步一下
+                defaults.synchronize()
     }
+    
+    func getLocalizedString(forKey key: String, in language: AppLanguage) -> String {
+            // "auto" 跟随系统，我们就用当前的 bundle
+            let langCode = language == .system ? Locale.current.language.languageCode?.identifier : language.rawValue
+            
+            // 找到对应语言的 .lproj 文件夹路径
+            guard let path = Bundle.main.path(forResource: langCode, ofType: "lproj"),
+                  let bundle = Bundle(path: path) else {
+                // 如果找不到特定语言的包，就返回英文作为备用
+                return NSLocalizedString(key, comment: "")
+            }
+            
+            // 从找到的语言包中加载翻译
+            return NSLocalizedString(key, tableName: nil, bundle: bundle, comment: "")
+        }
 }
 
 // TimeBar模型类
@@ -47,6 +74,8 @@ class TimeBarModel: ObservableObject {
     
     // 语言选项数据
     let languageOptions = AppLanguage.allCases
+    
+    var isSettingsWindowOpen = false
     
     private init() {}
     

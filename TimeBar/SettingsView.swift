@@ -7,85 +7,270 @@
 
 import SwiftUI
 
-struct SettingsView: View {
-    @ObservedObject var settings: UserSettings
-    @StateObject private var timeBarModel = TimeBarModel.shared
-    
-    // 所有支持的时区列表
-    let allTimeZones = TimeZone.knownTimeZoneIdentifiers
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Text("Settings")
-                .font(.largeTitle)
-                .frame(maxWidth: .infinity, alignment: .center)
-            
-            Form {
-                // 时区选择
-                Picker("Time Zone: ", selection: $settings.timeZoneIdentifier) {
-                    ForEach(allTimeZones, id: \.self) {
-                        Text($0.replacingOccurrences(of: "_", with: " "))
-                    }
-                }
-                
-                // 显示国旗或城市名称
-                Toggle(isOn: $settings.showFlag) {
-                    Text("Show Flag (instead of City Name) ")
-                }
-                
-                // 显示时差
-                Toggle(isOn: $settings.showTimeDifference) {
-                    Text("Show Time Difference")
-                }
-                
-                Picker("Language", selection: $settings.selectedLanguage) {
-                    ForEach(timeBarModel.languageOptions, id: \.self) { language in
-                        Text(timeBarModel.getLanguageDisplayName(for: language)).tag(language)
-                    }
-                }
-            }
-            
-            Spacer()
-        }
-        .padding()
-        .frame(width: 450, height: 300)
-        .background(WindowCloseObserver())
-    }
-}
-    
-// --- 辅助视图，用来监听窗口关闭 ---
-// NSViewRepresentable 是 SwiftUI 和 AppKit 之间的桥梁。
+
+
+// --- 辅助视图，用来监听窗口关闭 (保持不变) ---
 struct WindowCloseObserver: NSViewRepresentable {
-    
-    // 创建一个NSView实例
     func makeNSView(context: Context) -> NSView {
         let view = NSView()
-        
-        // 我们不能立即获取窗口，所以延迟到下一个UI更新周期
         DispatchQueue.main.async {
-            // 通过这个视图，我们可以找到它所在的窗口 (NSWindow)
             if let window = view.window {
-                // 监听这个特定窗口的“即将关闭”通知
                 NotificationCenter.default.addObserver(
-                    forName: NSWindow.willCloseNotification,
-                    object: window,
-                    queue: .main
+                    forName: NSWindow.willCloseNotification, object: window, queue: .main
                 ) { _ in
-                    // 当收到通知时（即用户关闭了窗口），执行这里的代码
-                    
-                    // 将App模式切换回“附件”，这会自动隐藏Dock图标
                     NSApp.setActivationPolicy(.accessory)
+                    TimeBarModel.shared.isSettingsWindowOpen = false
+                                        
+                                        // (可选) 添加一个打印语句，方便您在控制台确认逻辑是否被执行
+                                        print("Settings window closed. isSettingsWindowOpen set to: \(TimeBarModel.shared.isSettingsWindowOpen)")
+                                
                 }
             }
         }
         return view
     }
-    
-    // 更新NSView（在这里我们不需要做什么）
     func updateNSView(_ nsView: NSView, context: Context) {}
+                        
 }
 
 
+// --- 1. 为我们的导航标签创建一个枚举 ---
+enum SettingsTab: Hashable {
+    case general
+    case appearance
+}
+
+// --- 主设置视图，现在作为导航的容器 ---
+struct SettingsView: View {
+    @ObservedObject var settings: UserSettings
+    
+    // 用于控制侧边栏选择的状态变量
+    @State private var selectedTab: SettingsTab? = .general
+
+    // --- 【新增】步骤1: 创建一个计算属性来动态生成标题 ---
+        private var navigationTitle: String {
+            switch selectedTab {
+            case .general:
+                // 您也可以在这里使用本地化键 LocalizedStringKey("settings.tab.general")
+                return "General"
+            case .appearance:
+                return "Appearance"
+            case .none:
+                // 当没有选择任何项时的默认标题
+                return "TimeBar Settings"
+            }
+        }
+    
+    var body: some View {
+        // 使用 NavigationSplitView 来创建侧边栏布局
+        NavigationSplitView {
+            // --- 侧边栏 (Sidebar) ---
+            List(selection: $selectedTab) {
+                Label("General", systemImage: "gear")
+                    .tag(SettingsTab.general)
+                    .padding(.vertical, 2)
+                
+                Label("Appearance", systemImage: "paintbrush")
+                    .tag(SettingsTab.appearance)
+                    .padding(.vertical, 2)
+            }
+            .listStyle(.sidebar)
+            .frame(minWidth: 160, maxWidth: 250)
+            .background(Color(NSColor.controlBackgroundColor))
+            .scrollContentBackground(.hidden)
+            
+        } detail: {
+            // --- 内容区 (Detail) ---
+            // 根据侧边栏的选择，显示不同的视图
+            switch selectedTab {
+            case .general:
+                GeneralSettingsView(settings: settings)
+            case .appearance:
+                AppearanceSettingsView(settings: settings)
+            case .none:
+                Text("Select a category")
+                    .foregroundColor(.secondary)
+                    .font(.title2)
+            }
+        }
+        .navigationTitle(navigationTitle)
+        .frame(width: 550, height: 360) // 更紧凑的窗口尺寸，类似AirBattery
+        .background(WindowCloseObserver()) // 窗口关闭逻辑保持不变
+    }
+}
+
+
+// --- 2. 将"通用"设置项拆分成独立的子视图 ---
+struct GeneralSettingsView: View {
+    @ObservedObject var settings: UserSettings
+    @StateObject private var timeBarModel = TimeBarModel.shared // 保持对 Model 的引用
+    
+    // 用于语言切换 Alert 的状态
+    @State private var showAlert = false
+    @State private var alertTitle: String = ""
+    @State private var alertMessage: String = ""
+    @State private var restartButtonText: String = ""
+    @State private var laterButtonText: String = ""
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+//            // 标题区域
+//            VStack(alignment: .leading, spacing: 8) {
+//                Text("General")
+//                    .font(.title2)
+//                    .fontWeight(.semibold)
+//                    .padding(.horizontal, 20)
+//                    .padding(.top, 20)
+//                
+//                Divider()
+//                    .padding(.horizontal, 20)
+//            }
+//            
+            // 内容区域
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    // 语言设置组
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text("Language:")
+                                .fontWeight(.medium)
+                            Spacer()
+                            Picker("", selection: $settings.selectedLanguage) {
+                                ForEach(timeBarModel.languageOptions, id: \.self) { language in
+                                    Text(timeBarModel.getLanguageDisplayName(for: language)).tag(language)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .frame(width: 120)
+                        }
+                    }
+                    
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(8)
+                    .padding(.horizontal, 20)
+                }
+                .padding(.vertical, 16)
+            }
+        }
+        .background(Color(NSColor.windowBackgroundColor))
+        .onChange(of: settings.selectedLanguage) { oldValue, newValue in
+            Task {
+                // 语言切换的后台逻辑保持不变
+                let newLang = newValue
+                let title = LanguageManager.shared.getLocalizedString(forKey: "alert.restart.title", in: newLang)
+                let message = LanguageManager.shared.getLocalizedString(forKey: "alert.restart.message", in: newLang)
+                let restartText = LanguageManager.shared.getLocalizedString(forKey: "alert.restart.button.now", in: newLang)
+                let laterText = LanguageManager.shared.getLocalizedString(forKey: "alert.restart.button.later", in: newLang)
+                LanguageManager.shared.setLanguage(newLang)
+
+                await MainActor.run {
+                    self.alertTitle = title
+                    self.alertMessage = message
+                    self.restartButtonText = restartText
+                    self.laterButtonText = laterText
+                    self.showAlert = true
+                }
+            }
+        }
+        .alert(alertTitle, isPresented: $showAlert) {
+            Button(restartButtonText, role: .destructive) {
+                // 重启逻辑不变
+                let task = Process()
+                task.launchPath = "/usr/bin/open"
+                task.arguments = ["-n", Bundle.main.bundlePath]
+                task.launch()
+                NSApp.terminate(nil)
+            }
+            Button(laterButtonText, role: .cancel) {}
+        } message: {
+            Text(alertMessage)
+        }
+    }
+}
+
+
+// --- 3. 将"外观"设置项拆分成独立的子视图 ---
+struct AppearanceSettingsView: View {
+    @ObservedObject var settings: UserSettings
+    let allTimeZones = TimeZone.knownTimeZoneIdentifiers
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // 标题区域
+//            VStack(alignment: .leading, spacing: 8) {
+//                Text("Appearance")
+//                    .font(.title2)
+//                    .fontWeight(.semibold)
+//                    .padding(.horizontal, 20)
+//                    .padding(.top, 20)
+//                
+//                Divider()
+//                    .padding(.horizontal, 20)
+//            }
+            
+            // 内容区域
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    // 时区设置组
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text("Time Zone:")
+                                .fontWeight(.medium)
+                            Spacer()
+                            Picker("", selection: $settings.timeZoneIdentifier) {
+                                ForEach(allTimeZones, id: \.self) {
+                                    Text($0.replacingOccurrences(of: "_", with: " "))
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .frame(width: 180)
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(8)
+                    .padding(.horizontal, 20)
+                    
+                    // 显示选项组
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Show Country Flag")
+                                .fontWeight(.medium)
+                            Spacer()
+                            Toggle("", isOn: $settings.showFlag)
+                                .toggleStyle(.switch)
+                        }
+                        
+                        Divider()
+                            .padding(.horizontal, 4)
+                        
+                        HStack {
+                            Text("Show Time Difference")
+                                .fontWeight(.medium)
+                            Spacer()
+                            Toggle("", isOn: $settings.showTimeDifference)
+                                .toggleStyle(.switch)
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 16)
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(8)
+                    .padding(.horizontal, 20)
+                }
+                .padding(.vertical, 16)
+            }
+        }
+        .background(Color(NSColor.windowBackgroundColor))
+    }
+}
+
+
+// Preview 部分可以更新一下，方便单独调试
 #Preview {
+    // 预览主设置窗口
     SettingsView(settings: UserSettings())
 }
