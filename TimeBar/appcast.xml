@@ -4,11 +4,21 @@
         <title>TimeBar</title>
         <item>
             <title>0.1.1</title>
-            <pubDate>Sat, 20 Sep 2025 16:24:05 +0100</pubDate>
-            <sparkle:version>1</sparkle:version>
+            <pubDate>Sat, 20 Sep 2025 23:32:15 +0100</pubDate>
+            <sparkle:version>2</sparkle:version>
             <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
+            <description><![CDATA[
+                            <h3>界面优化与重构</h3>
+                            <ul>
+                                <li>全面重新设计了“通用 (General)”与“时区 (Time Zone)”设置页面，布局更清晰，外观更现代化。</li>
+                                <li>将相关的设置项整合到带边框的分组框中，信息结构一目了然。</li>
+                                <li>统一了所有设置页面的间距、对齐和样式，提供了高度一致的视觉体验。</li>
+                                <li>更新了按钮样式，使其更符合原生 macOS 的设计规范。</li>
+                                <li>调整了设置窗口的默认宽度，提高了内容的可读性和操作舒适度。</li>
+                            </ul>
+                        ]]></description>
             <sparkle:minimumSystemVersion>14.1</sparkle:minimumSystemVersion>
-            <enclosure url="TimeBar.zip" length="3143570" type="application/octet-stream"/>
+            <enclosure url="https://raw.githubusercontent.com/bugsmachine/TimeBar/refs/heads/main/TimeBar/TimeBar.zip" length="3205344" type="application/octet-stream" sparkle:edSignature="R9+AHixB/sz/yzZARgeEtMC6qrkxq0MpSzaG/2w70yI3R+jWZQG8XwWYCiBU6p96u5n3oBxs7Y5sMmvVJNioDQ=="/>
         </item>
     </channel>
 </rss>
