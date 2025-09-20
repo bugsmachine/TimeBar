@@ -8,6 +8,7 @@
 // ContentView.swift 的完整修改
 
 import SwiftUI
+import AppKit
 
 
 struct ContentView: View {
@@ -16,7 +17,7 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             
-            Button("设置...") {
+            Button("Settings...") {
                 // 1. 切换模式，显示Dock图标
                 NSApp.setActivationPolicy(.regular)
                 
@@ -28,8 +29,16 @@ struct ContentView: View {
             }
             
             Divider()
+            
+            Button("Check for Updates...") {
+                if let appDelegate = NSApp.delegate as? AppDelegate {
+                    appDelegate.checkForUpdates()
+                }
+            }
 
-            Button("退出应用") {
+            Divider()
+
+            Button("Quit TimeBar") {
                 NSApplication.shared.terminate(nil)
             }
         }

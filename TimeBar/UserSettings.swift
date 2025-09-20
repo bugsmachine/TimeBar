@@ -29,11 +29,30 @@ class UserSettings: ObservableObject {
             objectWillChange.send()
         }
     }
+    
+    // 存储用户选择的语言
+    @Published var selectedLanguage: AppLanguage = .system {
+        didSet {
+            UserDefaults.standard.set(selectedLanguage.rawValue, forKey: "selectedLanguage")
+            // 通知语言管理器更新语言
+            LanguageManager.shared.setLanguage(selectedLanguage)
+            objectWillChange.send()
+        }
+    }
 
     init() {
-        // 从 UserDefaults 加载保存的设置
-        self.timeZoneIdentifier = UserDefaults.standard.string(forKey: "timeZoneIdentifier") ?? "Asia/Shanghai"
-        self.showFlag = UserDefaults.standard.bool(forKey: "showFlag")
-        self.showTimeDifference = UserDefaults.standard.bool(forKey: "showTimeDifference")
+        // 从UserDefaults加载保存的设置
+        if let savedTimeZone = UserDefaults.standard.string(forKey: "timeZoneIdentifier") {
+            timeZoneIdentifier = savedTimeZone
+        }
+        
+        showFlag = UserDefaults.standard.bool(forKey: "showFlag")
+        showTimeDifference = UserDefaults.standard.bool(forKey: "showTimeDifference")
+        
+        // 加载语言设置
+        if let savedLanguageRaw = UserDefaults.standard.string(forKey: "selectedLanguage"),
+           let savedLanguage = AppLanguage(rawValue: savedLanguageRaw) {
+            selectedLanguage = savedLanguage
+        }
     }
 }

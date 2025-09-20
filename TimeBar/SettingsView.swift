@@ -9,19 +9,20 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var settings: UserSettings
+    @StateObject private var timeBarModel = TimeBarModel.shared
     
     // 所有支持的时区列表
     let allTimeZones = TimeZone.knownTimeZoneIdentifiers
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text("应用设置")
+            Text("Settings")
                 .font(.largeTitle)
                 .frame(maxWidth: .infinity, alignment: .center)
             
             Form {
                 // 时区选择
-                Picker("选择时区:", selection: $settings.timeZoneIdentifier) {
+                Picker("Time Zone: ", selection: $settings.timeZoneIdentifier) {
                     ForEach(allTimeZones, id: \.self) {
                         Text($0.replacingOccurrences(of: "_", with: " "))
                     }
@@ -29,12 +30,18 @@ struct SettingsView: View {
                 
                 // 显示国旗或城市名称
                 Toggle(isOn: $settings.showFlag) {
-                    Text("显示国旗（否则显示城市名称）")
+                    Text("Show Flag (instead of City Name) ")
                 }
                 
                 // 显示时差
                 Toggle(isOn: $settings.showTimeDifference) {
-                    Text("显示时差")
+                    Text("Show Time Difference")
+                }
+                
+                Picker("Language", selection: $settings.selectedLanguage) {
+                    ForEach(timeBarModel.languageOptions, id: \.self) { language in
+                        Text(timeBarModel.getLanguageDisplayName(for: language)).tag(language)
+                    }
                 }
             }
             
