@@ -252,6 +252,17 @@
         }
       }
     },
+    "Settings…" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置…"
+          }
+        }
+      }
+    },
     "Show Country Flag" : {
       "localizations" : {
         "zh-Hans" : {
