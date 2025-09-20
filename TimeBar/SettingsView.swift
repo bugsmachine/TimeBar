@@ -17,6 +17,10 @@ struct WindowConfigurator: NSViewRepresentable {
             if let window = view.window {
                 // Force the modern unified title bar/toolbar style
                 window.styleMask.insert(.unifiedTitleAndToolbar)
+                window.standardWindowButton(.zoomButton)?.isEnabled = false
+
+                // 禁用窗口大小调整
+                window.styleMask.remove(.resizable)
                 
                 // Tell the system NOT to save this window's state upon quitting.
                 window.isRestorable = false
@@ -45,29 +49,26 @@ enum SettingsTab: Hashable {
 // --- 主设置视图，现在作为导航的容器 ---
 struct SettingsView: View {
     @ObservedObject var settings: UserSettings
-    
-    // 用于控制侧边栏选择的状态变量
     @State private var selectedTab: SettingsTab? = .general
 
-    // --- 【新增】步骤1: 创建一个计算属性来动态生成标题 ---
-        private var navigationTitle: String {
+   
+        private var navigationTitle: Text {
             switch selectedTab {
             case .general:
-                // 您也可以在这里使用本地化键 LocalizedStringKey("settings.tab.general")
-                return "General"
+                return Text("General")
             case .time:
-                return "Time Zone"
+                return Text("Time Zone")
             case .appearance:
-                return "Appearance"
+                return Text("Appearance")
             case .none:
                 // 当没有选择任何项时的默认标题
-                return "TimeBar Settings"
+                return Text("TimeBar Settings")
             }
         }
     
     var body: some View {
         // 使用 NavigationSplitView 来创建侧边栏布局
-        NavigationSplitView {
+            NavigationSplitView(columnVisibility: .constant(.all)) {
             // --- 侧边栏 (Sidebar) ---
             List(selection: $selectedTab) {
                 Label("General", systemImage: "gear")
@@ -112,9 +113,9 @@ struct SettingsView: View {
 // --- 2. 将"通用"设置项拆分成独立的子视图 ---
 struct GeneralSettingsView: View {
     @ObservedObject var settings: UserSettings
-    @StateObject private var timeBarModel = TimeBarModel.shared // 保持对 Model 的引用
+    @StateObject private var timeBarModel = TimeBarModel.shared
     
-    // 用于语言切换 Alert 的状态
+    // ... (State 变量等保持不变)
     @State private var showAlert = false
     @State private var alertTitle: String = ""
     @State private var alertMessage: String = ""
@@ -123,22 +124,12 @@ struct GeneralSettingsView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-//            // 标题区域
-//            VStack(alignment: .leading, spacing: 8) {
-//                Text("General")
-//                    .font(.title2)
-//                    .fontWeight(.semibold)
-//                    .padding(.horizontal, 20)
-//                    .padding(.top, 20)
-//                
-//                Divider()
-//                    .padding(.horizontal, 20)
-//            }
-//            
-            // 内容区域
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    // 语言设置组
+                VStack(alignment: .leading, spacing: 12) {
+                    
+                    // ... (以上部分代码保持不变) ...
+                    
+                    // MARK: - 语言设置组
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text("Language:")
@@ -153,19 +144,109 @@ struct GeneralSettingsView: View {
                             .frame(width: 120)
                         }
                     }
-                    
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 12)
+                    .padding()
                     .background(Color(NSColor.controlBackgroundColor))
                     .cornerRadius(8)
-                    .padding(.horizontal, 20)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                    )
+                    .padding(.horizontal, 12)
+                    
+                    // MARK: - 启动设置组
+                    Text("Startup Settings")
+                        .font(.headline)
+                        .fontWeight(.medium)
+                        .padding(.horizontal, 12)
+                        .padding(.top, 10)
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Launch at Login")
+                                .fontWeight(.medium)
+                            Spacer()
+                            Toggle("", isOn: .constant(true))
+                                .toggleStyle(.switch)
+                        }
+                        
+                        HStack {
+                            Text("Show Settings Window at Startup")
+                                .fontWeight(.medium)
+                            Spacer()
+                            Toggle("", isOn: .constant(false))
+                                .toggleStyle(.switch)
+                        }
+                    }
+                    .padding()
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                    )
+                    .padding(.horizontal, 12)
+                    
+                    // MARK: - 更新设置组
+                    Text("Update Settings")
+                        .font(.headline)
+                        .fontWeight(.medium)
+                        .padding(.horizontal, 12)
+                        .padding(.top, 10)
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Automatically Check for Updates")
+                                .fontWeight(.medium)
+                            Spacer()
+                            Toggle("", isOn: .constant(true))
+                                .toggleStyle(.switch)
+                        }
+                        
+                        Divider().padding(.horizontal, 4)
+                        
+                        HStack {
+                            Text("Automatically Download Updates")
+                                .fontWeight(.medium)
+                            Spacer()
+                            Toggle("", isOn: .constant(false))
+                                .toggleStyle(.switch)
+                        }
+                    }
+                    .padding()
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                    )
+                    .padding(.horizontal, 12)
+                    
+                    
+                    // MARK: - 检查更新按钮和版本信息 (居中)
+                    // !!! 样式修改：移除 alignment: .leading, 使用默认的 center 对齐 !!!
+                    VStack(spacing: 8) { // 稍微减小间距
+                        Button(action: {
+                            print("Check for Updates...")
+                        }) {
+                            Text("Check for Updates...")
+                        }
+                        .buttonStyle(.bordered)
+                        
+                        Text("TimeBar v1.6.3")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.top, 10)
+                    // !!! 样式修改：让 VStack 撑满宽度以实现居中 !!!
+                    .frame(maxWidth: .infinity, alignment: .center)
+
                 }
-                .padding(.vertical, 16)
+                .padding(.vertical, 8)
             }
         }
         .background(Color(NSColor.windowBackgroundColor))
         .onChange(of: settings.selectedLanguage) { oldValue, newValue in
-            Task {
+              Task {
                 // 语言切换的后台逻辑保持不变
                 let newLang = newValue
                 let title = LanguageManager.shared.getLocalizedString(forKey: "alert.restart.title", in: newLang)
@@ -175,55 +256,45 @@ struct GeneralSettingsView: View {
                 LanguageManager.shared.setLanguage(newLang)
 
                 await MainActor.run {
-                    self.alertTitle = title
-                    self.alertMessage = message
-                    self.restartButtonText = restartText
-                    self.laterButtonText = laterText
-                    self.showAlert = true
+                  self.alertTitle = title
+                  self.alertMessage = message
+                  self.restartButtonText = restartText
+                  self.laterButtonText = laterText
+                  self.showAlert = true
                 }
+              }
             }
-        }
-        .alert(alertTitle, isPresented: $showAlert) {
-            Button(restartButtonText, role: .destructive) {
+            .alert(alertTitle, isPresented: $showAlert) {
+              Button(restartButtonText, role: .destructive) {
                 // 重启逻辑不变
                 let task = Process()
                 task.launchPath = "/usr/bin/open"
                 task.arguments = ["-n", Bundle.main.bundlePath]
                 task.launch()
                 NSApp.terminate(nil)
+              }
+              Button(laterButtonText, role: .cancel) {}
+            } message: {
+              Text(alertMessage)
             }
-            Button(laterButtonText, role: .cancel) {}
-        } message: {
-            Text(alertMessage)
+          }
         }
-    }
-}
 
-
-// --- 3. 将"外观"设置项拆分成独立的子视图 ---
+// --- 将"外观"设置项拆分成独立的子视图 ---
 struct TimeZoneSettingsView: View {
     @ObservedObject var settings: UserSettings
     let allTimeZones = TimeZone.knownTimeZoneIdentifiers
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 标题区域
-//            VStack(alignment: .leading, spacing: 8) {
-//                Text("Appearance")
-//                    .font(.title2)
-//                    .fontWeight(.semibold)
-//                    .padding(.horizontal, 20)
-//                    .padding(.top, 20)
-//                
-//                Divider()
-//                    .padding(.horizontal, 20)
-//            }
-            
-            // 内容区域
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    // 时区设置组
-                    VStack(alignment: .leading, spacing: 8) {
+                    
+                    // MARK: - 新的设置组 (New Settings Group)
+                    // 将所有设置项放入这一个 VStack 中
+                    VStack(alignment: .leading, spacing: 12) {
+                        
+                        // 1. 时区选择行 (Time Zone Row)
                         HStack {
                             Text("Time Zone:")
                                 .fontWeight(.medium)
@@ -236,15 +307,11 @@ struct TimeZoneSettingsView: View {
                             .pickerStyle(.menu)
                             .frame(width: 180)
                         }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 12)
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                    .padding(.horizontal, 20)
-                    
-                    // 显示选项组
-                    VStack(alignment: .leading, spacing: 12) {
+                        
+                        // -- 第一个分割线 --
+                        Divider()
+                        
+                        // 2. 显示国旗开关行 (Show Flag Row)
                         HStack {
                             Text("Show Country Flag")
                                 .fontWeight(.medium)
@@ -253,9 +320,10 @@ struct TimeZoneSettingsView: View {
                                 .toggleStyle(.switch)
                         }
                         
+                        // -- 第二个分割线 --
                         Divider()
-                            .padding(.horizontal, 4)
                         
+                        // 3. 显示时差开关行 (Show Time Difference Row)
                         HStack {
                             Text("Show Time Difference")
                                 .fontWeight(.medium)
@@ -264,22 +332,24 @@ struct TimeZoneSettingsView: View {
                                 .toggleStyle(.switch)
                         }
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 16)
+                    // MARK: - 样式修饰符 (Styling Modifiers)
+                    // 将所有样式统一应用到这个新的 VStack 容器上
+                    .padding() // 给整个组的内容添加统一的内边距
                     .background(Color(NSColor.controlBackgroundColor))
                     .cornerRadius(8)
-                    .padding(.horizontal, 20)
+                    .overlay(
+                        // 使用 overlay 绘制一个更精致的边框
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                    )
+                    // 最后应用外边距，调整整个组在窗口中的位置
+                    .padding(.horizontal, 12)
+                    
                 }
-                .padding(.vertical, 16)
+                .padding(.vertical, 8)
             }
         }
         .background(Color(NSColor.windowBackgroundColor))
     }
 }
 
-
-// Preview 部分可以更新一下，方便单独调试
-#Preview {
-    // 预览主设置窗口
-    SettingsView(settings: UserSettings())
-}

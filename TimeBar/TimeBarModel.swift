@@ -53,19 +53,35 @@ final class LanguageManager {
     }
     
     func getLocalizedString(forKey key: String, in language: AppLanguage) -> String {
-            // "auto" 跟随系统，我们就用当前的 bundle
-            let langCode = language == .system ? Locale.current.language.languageCode?.identifier : language.rawValue
-            
-            // 找到对应语言的 .lproj 文件夹路径
-            guard let path = Bundle.main.path(forResource: langCode, ofType: "lproj"),
-                  let bundle = Bundle(path: path) else {
-                // 如果找不到特定语言的包，就返回英文作为备用
-                return NSLocalizedString(key, comment: "")
-            }
-            
-            // 从找到的语言包中加载翻译
-            return NSLocalizedString(key, tableName: nil, bundle: bundle, comment: "")
+        print("Getting localized string for key: '\(key)' in language: \(language.rawValue)")
+
+        let langCode: String?
+        
+        if language == .system {
+            // 使用 preferredLocalizations.first，它能更准确地反映 App 当前使用的系统语言
+            langCode = Bundle.main.preferredLocalizations.first
+            print("System language detected as: \(langCode ?? "nil") by preferredLocalizations")
+        } else {
+            langCode = language.rawValue
         }
+        
+        // 确保 langCode 不是 nil
+        guard let code = langCode else {
+            print("Language code is nil, falling back to default.")
+            return NSLocalizedString(key, comment: "")
+        }
+
+        // 找到对应语言的 .lproj 文件夹路径
+        guard let path = Bundle.main.path(forResource: code, ofType: "lproj"),
+              let bundle = Bundle(path: path) else {
+            print("Language bundle not found for '\(code)', falling back to default.")
+            // 如果找不到特定语言的包，就返回默认（通常是英文）的翻译
+            return NSLocalizedString(key, comment: "")
+        }
+        
+        // 从找到的语言包中加载翻译
+        return NSLocalizedString(key, tableName: nil, bundle: bundle, comment: "")
+    }
 }
 
 // TimeBar模型类

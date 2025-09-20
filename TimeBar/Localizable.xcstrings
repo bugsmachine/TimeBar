@@ -126,6 +126,15 @@
     "Appearance settings will go here." : {
 
     },
+    "Automatically Check for Updates" : {
+
+    },
+    "Automatically Download Updates" : {
+
+    },
+    "Check for Updates..." : {
+
+    },
     "Check for Updates…" : {
       "localizations" : {
         "zh-Hans" : {
@@ -172,6 +181,9 @@
           }
         }
       }
+    },
+    "Launch at Login" : {
+
     },
     "Quit TimeBar" : {
       "localizations" : {
@@ -247,6 +259,9 @@
         }
       }
     },
+    "Show Settings Window at Startup" : {
+
+    },
     "Show Time Difference" : {
       "localizations" : {
         "zh-Hans" : {
@@ -256,6 +271,9 @@
           }
         }
       }
+    },
+    "Startup Settings" : {
+
     },
     "Time Zone" : {
       "localizations" : {
@@ -287,6 +305,15 @@
           }
         }
       }
+    },
+    "TimeBar Settings" : {
+
+    },
+    "TimeBar v1.6.3" : {
+
+    },
+    "Update Settings" : {
+
     }
   },
   "version" : "1.1"
