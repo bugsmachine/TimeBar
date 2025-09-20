@@ -18,7 +18,7 @@
                             </ul>
                         ]]></description>
             <sparkle:minimumSystemVersion>14.1</sparkle:minimumSystemVersion>
-            <enclosure url="https://raw.githubusercontent.com/bugsmachine/TimeBar/refs/heads/main/TimeBar/TimeBar.zip" length="3206074" type="application/octet-stream" sparkle:edSignature="Vz/q0v2nR8K20WpnS0OQXK3KCMgH31bQp8/mKdl5TFLL+bOuyzfzeBAsvay5uuchgpOWuULDPiJa3nCu027MCQ=="/>
+            <enclosure url="https://github.com/bugsmachine/TimeBar/releases/download/v0.1.2/TimeBar.zip" length="3206074" type="application/octet-stream" sparkle:edSignature="Vz/q0v2nR8K20WpnS0OQXK3KCMgH31bQp8/mKdl5TFLL+bOuyzfzeBAsvay5uuchgpOWuULDPiJa3nCu027MCQ=="/>
         </item>
     </channel>
 </rss>
