@@ -1,7 +1,7 @@
 # TimeBar
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/bugsmachine/TimeBar/refs/heads/main/TimeBarIcon.png" width="128">
+  <img src="https://raw.githubusercontent.com/bugsmachine/TimeBar/refs/heads/main/TimeBarIcon-T.png" width="128">
 </p>
 <h3 align="center">在你的菜单栏优雅地显示一个额外时区。</h3>
 <p align="center">
