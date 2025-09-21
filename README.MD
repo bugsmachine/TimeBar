@@ -1,15 +1,15 @@
 # TimeBar
 
 <p align="center">
-  <img src="[TimeBar/Assets.xcassets/AppIcon.appiconset/icon_128x128@2x.png]" width="128">
+  <img src="[https://raw.githubusercontent.com/bugsmachine/TimeBar/refs/heads/main/TimeBarIcon.png]" width="128">
 </p>
 <h3 align="center">在你的菜单栏优雅地显示一个额外时区。</h3>
 <p align="center">
   一款简洁优雅的 macOS 菜单栏应用，完美适用于追踪全球各地的同事、家人和朋友的时间。
 </p>
-<p align="center">
-    <img src="[请在这里替换成你的应用截图路径]" alt="TimeBar Screenshot" width="600">
-</p>
+<!--<p align="center">-->
+<!--    <img src="[请在这里替换成你的应用截图路径]" alt="TimeBar Screenshot" width="600">-->
+<!--</p>-->
 
 ## ✨ 功能特性
 
