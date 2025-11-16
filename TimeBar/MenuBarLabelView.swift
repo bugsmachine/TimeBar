@@ -30,17 +30,21 @@ struct MenuBarLabelView: View {
                         updateMenuBar()
                     }
                     .onChange(of: settings.showFlag) {
-                        print("ShowFlag changed to: \(settings.showFlag)")
-                        updateMenuBar()
-                    }
-                    .onChange(of: settings.showTimeDifference) {
-                        print("ShowTimeDifference changed to: \(settings.showTimeDifference)")
-                        updateMenuBar()
-                    }
-                    .onChange(of: settings.componentOrder) {
-                        print("Component order changed")
-                        updateMenuBar()
-                    }
+                print("ShowFlag changed to: \(settings.showFlag)")
+                updateMenuBar()
+            }
+            .onChange(of: settings.timeZoneNickname) {
+                print("TimeZone nickname changed to: \(settings.timeZoneNickname)")
+                updateMenuBar()
+            }
+            .onChange(of: settings.showTimeDifference) {
+                print("ShowTimeDifference changed to: \(settings.showTimeDifference)")
+                updateMenuBar()
+            }
+            .onChange(of: settings.componentOrder) {
+                print("Component order changed")
+                updateMenuBar()
+            }
     }
     
     private func buildMenuBarTextWithSymbols() -> String {
@@ -93,6 +97,8 @@ struct MenuBarLabelView: View {
             } else {
                 self.prefix = "🌍"
             }
+        } else if !settings.timeZoneNickname.isEmpty {
+            self.prefix = settings.timeZoneNickname
         } else {
             self.prefix = extractCityName(from: settings.timeZoneIdentifier)
         }

@@ -19,18 +19,18 @@ struct ContentView: View {
     @StateObject private var timeBarModel = TimeBarModel.shared // 保持对 Model 的引用
 
     let updater: SPUUpdater
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Button("About TimeBar") {
-                            // “关于”面板也需要 App 处于激活状态才能显示
+                            // "关于"面板也需要 App 处于激活状态才能显示
                             NSApp.setActivationPolicy(.regular)
-                            // 调用系统标准的“关于”面板
+                            // 调用系统标准的"关于"面板
                             NSApp.orderFrontStandardAboutPanel(nil)
                             NSApp.activate(ignoringOtherApps: true)
                         }
-            
-            
+
+
             Button("Settings...") {
                 if timeBarModel.isSettingsWindowOpen {
                     // 如果窗口已经打开，直接激活它
@@ -42,9 +42,9 @@ struct ContentView: View {
                 NSApp.activate(ignoringOtherApps: true)
                 timeBarModel.isSettingsWindowOpen = true // 更新状态
           }
-            
+
             Divider()
-            
+
 
             CheckForUpdatesView(updater: updater)
 

@@ -15,7 +15,6 @@ import Sparkle
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
-        // 程序化设置应用图标，供台前调度使用
     }
 }
 

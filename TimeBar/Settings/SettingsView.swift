@@ -44,7 +44,6 @@ struct WindowConfigurator: NSViewRepresentable {
 
 enum SettingsTab: Hashable {
     case general
-    case time
     case appearance
 }
 
@@ -55,18 +54,15 @@ struct SettingsView: View {
     var updater: SPUUpdater?
 
     private var navigationTitle: Text {
-            switch selectedTab {
-            case .general:
-                return Text("General")
-            case .time:
-                return Text("Time Zone")
-            case .appearance:
-                return Text("Appearance")
-            case .none:
-                // 当没有选择任何项时的默认标题
-                return Text("TimeBar Settings")
-            }
+        switch selectedTab {
+        case .general:
+            return Text("General")
+        case .appearance:
+            return Text("Appearance")
+        case .none:
+            return Text("TimeBar Settings")
         }
+    }
     
     var body: some View {
         // 使用 NavigationSplitView 来创建侧边栏布局
@@ -76,10 +72,7 @@ struct SettingsView: View {
                 Label("General", systemImage: "gear")
                     .tag(SettingsTab.general)
                     .padding(.vertical, 2)
-                
-                Label("Time Zone", systemImage: "clock")
-                    .tag(SettingsTab.time)
-                    .padding(.vertical, 2)
+
                 Label("Appearance", systemImage: "paintbrush")
                     .tag(SettingsTab.appearance)
                     .padding(.vertical, 2)
@@ -94,8 +87,6 @@ struct SettingsView: View {
             switch selectedTab {
             case .general:
                 GeneralSettingsView(settings: settings, updater: updater)
-            case .time:
-                TimeZoneSettingsView(settings: settings)
             case .appearance:
                 AppearanceSettingsView(settings: settings)
             case .none:
@@ -280,96 +271,113 @@ struct GeneralSettingsView: View {
           }
         }
 
-// --- 将"外观"设置项拆分成独立的子视图 ---
+// --- Merged Time Zone & Appearance Settings View ---
 struct TimeZoneSettingsView: View {
+    // This view is now deprecated and merged with AppearanceSettingsView
     @ObservedObject var settings: UserSettings
+
+    var body: some View {
+        AppearanceSettingsView(settings: settings)
+    }
+}
+
+// --- 外观与时区设置视图 (Appearance & Display Settings) ---
+struct AppearanceSettingsView: View {
+    @ObservedObject var settings: UserSettings
+    @State private var draggedComponent: MenuBarComponent?
     let allTimeZones = TimeZone.knownTimeZoneIdentifiers
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    
-                    // MARK: - 新的设置组 (New Settings Group)
-                    // 将所有设置项放入这一个 VStack 中
-                    VStack(alignment: .leading, spacing: 12) {
-                        
-                        // 1. 时区选择行 (Time Zone Row)
-                        HStack {
-                            Text("Time Zone:")
-                                .fontWeight(.medium)
-                            Spacer()
-                            Picker("", selection: $settings.timeZoneIdentifier) {
-                                ForEach(allTimeZones, id: \.self) {
-                                    Text($0.replacingOccurrences(of: "_", with: " "))
-                                }
-                            }
-                            .pickerStyle(.menu)
-                            .frame(width: 180)
-                        }
-                        
-                        // -- 第一个分割线 --
-                        Divider()
-                        
-                        // 2. 显示国旗开关行 (Show Flag Row)
-                        HStack {
-                            Text("Show Country Flag")
-                                .fontWeight(.medium)
-                            Spacer()
-                            Toggle("", isOn: $settings.showFlag)
-                                .toggleStyle(.switch)
-                        }
-                        
-                        // -- 第二个分割线 --
-                        Divider()
-                        
-                        // 3. 显示时差开关行 (Show Time Difference Row)
-                        HStack {
-                            Text("Show Time Difference")
-                                .fontWeight(.medium)
-                            Spacer()
-                            Toggle("", isOn: $settings.showTimeDifference)
-                                .toggleStyle(.switch)
-                        }
-                    }
-                    // MARK: - 样式修饰符 (Styling Modifiers)
-                    // 将所有样式统一应用到这个新的 VStack 容器上
-                    .padding() // 给整个组的内容添加统一的内边距
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                    .overlay(
-                        // 使用 overlay 绘制一个更精致的边框
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                    )
-                    // 最后应用外边距，调整整个组在窗口中的位置
-                    .padding(.horizontal, 12)
-                    
-                }
-                .padding(.vertical, 8)
-            }
-        }
-        .background(Color(NSColor.windowBackgroundColor))
-    }
-}
-
-// --- 外观设置视图 ---
-struct AppearanceSettingsView: View {
-    @ObservedObject var settings: UserSettings
-    @State private var draggedComponent: MenuBarComponent?
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
+                    // MARK: - Component Order Section (with Live Preview)
                     ComponentOrderSection(settings: settings, draggedComponent: $draggedComponent)
-                    DisplayOptionsSection(settings: settings)
+
+                    // MARK: - Time Zone & Display Options Section
+                    TimeZoneDisplaySection(settings: settings, allTimeZones: allTimeZones)
                 }
                 .padding(.vertical, 8)
                 .padding(.horizontal, 20)
             }
         }
         .background(Color(NSColor.windowBackgroundColor))
+    }
+}
+
+// --- Time Zone & Display Options Combined Section ---
+struct TimeZoneDisplaySection: View {
+    @ObservedObject var settings: UserSettings
+    let allTimeZones: [String]
+    @FocusState private var isLocationNameFocused: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Time Zone Settings")
+                .font(.headline)
+                .fontWeight(.medium)
+
+            VStack(alignment: .leading, spacing: 12) {
+                // Time Zone Picker
+                HStack {
+                    Text("Time Zone:")
+                        .fontWeight(.medium)
+                    Spacer()
+                    Picker("", selection: $settings.timeZoneIdentifier) {
+                        ForEach(allTimeZones, id: \.self) {
+                            Text($0.replacingOccurrences(of: "_", with: " "))
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .frame(width: 180)
+                }
+
+                Divider()
+
+                // Timezone Nickname/Label Input
+                HStack {
+                    Text("Location Name:")
+                        .fontWeight(.medium)
+                    Spacer()
+                    TextField("e.g., Home, Office, Beijing", text: $settings.timeZoneNickname)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: 180)
+                        .focused($isLocationNameFocused)
+                        .onSubmit {
+                            isLocationNameFocused = false
+                        }
+                }
+
+                Divider()
+
+                // Show Flag Toggle - now shows flag emoji or location/timezone name
+                HStack {
+                    Text("Show Flag/Name")
+                        .fontWeight(.medium)
+                    Spacer()
+                    Toggle("", isOn: $settings.showFlag)
+                        .toggleStyle(.switch)
+                }
+
+                Divider()
+
+                // Show Time Difference Toggle
+                HStack {
+                    Text("Show Time Difference")
+                        .fontWeight(.medium)
+                    Spacer()
+                    Toggle("", isOn: $settings.showTimeDifference)
+                        .toggleStyle(.switch)
+                }
+            }
+            .padding()
+            .background(Color(NSColor.controlBackgroundColor))
+            .cornerRadius(8)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+            )
+        }
     }
 }
 
@@ -448,63 +456,19 @@ struct SingleComponentView: View {
     }
 }
 
-// --- 显示选项设置组 ---
-struct DisplayOptionsSection: View {
-    @ObservedObject var settings: UserSettings
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Display Options")
-                .font(.headline)
-                .fontWeight(.medium)
-
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Text("Show Time Difference")
-                        .fontWeight(.medium)
-                    Spacer()
-                    Toggle("", isOn: $settings.showTimeDifference)
-                        .toggleStyle(.switch)
-                        .onChange(of: settings.showTimeDifference) { oldValue, newValue in
-                            handleTimeDifferenceToggle(newValue)
-                        }
-                }
-            }
-            .padding()
-            .background(Color(NSColor.controlBackgroundColor))
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-            )
-        }
-    }
-
-    private func handleTimeDifferenceToggle(_ isEnabled: Bool) {
-        if isEnabled {
-            // 添加时差组件到之前保存的位置
-            if !settings.componentOrder.contains(.timeDifference) {
-                // 确保索引在有效范围内
-                let targetIndex = min(settings.timeDifferenceLastIndex, settings.componentOrder.count)
-                settings.componentOrder.insert(.timeDifference, at: targetIndex)
-            }
-        } else {
-            // 删除时差组件，但保存其位置
-            if let index = settings.componentOrder.firstIndex(of: .timeDifference) {
-                settings.timeDifferenceLastIndex = index
-                settings.componentOrder.remove(at: index)
-            }
-        }
-    }
-}
-
-// --- 可拖拽的组件卡片视图 ---
+// --- Live Component Card View ---
 struct ComponentDragDropView: View {
     let component: MenuBarComponent
     let isBeingDragged: Bool
     let onDragChange: (Bool) -> Void
     @ObservedObject var settings: UserSettings
     @Binding var isHovered: Bool
+
+    @State private var liveTime: String = "..."
+    @State private var liveFlagOrName: String = ""
+    @State private var liveTimeDiff: String = ""
+    @State private var liveDayNight: String = ""
+    @State private var timer: Timer?
 
     private var backgroundColor: Color {
         if isBeingDragged {
@@ -528,7 +492,7 @@ struct ComponentDragDropView: View {
 
     var body: some View {
         VStack(spacing: 1) {
-            componentPreviewText
+            componentLiveText
                 .font(.system(size: 15, weight: .regular, design: .monospaced))
                 .foregroundColor(.primary)
                 .lineLimit(1)
@@ -556,19 +520,108 @@ struct ComponentDragDropView: View {
             component: component,
             settings: settings
         ))
+        .onAppear {
+            updateLiveData()
+            startTimer()
+        }
+        .onDisappear {
+            stopTimer()
+        }
+        .onChange(of: settings.timeZoneIdentifier) { _, _ in
+            updateLiveData()
+        }
+        .onChange(of: settings.showFlag) { _, _ in
+            updateLiveData()
+        }
+        .onChange(of: settings.timeZoneNickname) { _, _ in
+            updateLiveData()
+        }
+        .onChange(of: settings.showTimeDifference) { _, _ in
+            updateLiveData()
+        }
     }
 
-    private var componentPreviewText: Text {
+    private var componentLiveText: Text {
         switch component {
         case .flag:
-            return Text("🇨🇳")
+            return Text(liveFlagOrName.isEmpty ? "..." : liveFlagOrName)
         case .time:
-            return Text("14:30")
+            return Text(liveTime)
         case .timeDifference:
-            return Text("+8")
+            return Text(liveTimeDiff.isEmpty ? "-" : liveTimeDiff)
         case .dayNight:
-            return Text("☀︎")
+            return Text(liveDayNight)
         }
+    }
+
+    private func updateLiveData() {
+        let timeZone = TimeZone(identifier: settings.timeZoneIdentifier) ?? .current
+        let date = Date()
+
+        // Update time
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HH:mm"
+        timeFormatter.timeZone = timeZone
+        liveTime = timeFormatter.string(from: date)
+
+        // Update day/night icon
+        let hourFormatter = DateFormatter()
+        hourFormatter.dateFormat = "H"
+        hourFormatter.timeZone = timeZone
+        if let hour = Int(hourFormatter.string(from: date)) {
+            liveDayNight = (hour >= 6 && hour < 18) ? "☀︎" : "☽"
+        }
+
+        // Update flag or name
+        if settings.showFlag {
+            if let countryCode = timeZoneToCountryCode[settings.timeZoneIdentifier] {
+                liveFlagOrName = countryCodeToFlag(countryCode)
+            } else {
+                liveFlagOrName = "🌍"
+            }
+        } else if !settings.timeZoneNickname.isEmpty {
+            liveFlagOrName = settings.timeZoneNickname
+        } else {
+            // Extract city name
+            let components = settings.timeZoneIdentifier.split(separator: "/")
+            if components.count >= 2 {
+                liveFlagOrName = String(components.last!).replacingOccurrences(of: "_", with: " ")
+            }
+        }
+
+        // Update time difference
+        if settings.showTimeDifference {
+            let localTimeZone = TimeZone.current
+            let differenceInSeconds = timeZone.secondsFromGMT() - localTimeZone.secondsFromGMT()
+            let differenceInHours = differenceInSeconds / 3600
+            if differenceInHours != 0 {
+                liveTimeDiff = String(format: "%+d", differenceInHours)
+            } else {
+                liveTimeDiff = ""
+            }
+        } else {
+            liveTimeDiff = ""
+        }
+    }
+
+    private func countryCodeToFlag(_ countryCode: String) -> String {
+        let base: UInt32 = 127397
+        var s = ""
+        for v in countryCode.unicodeScalars {
+            s.unicodeScalars.append(UnicodeScalar(base + v.value)!)
+        }
+        return s
+    }
+
+    private func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            updateLiveData()
+        }
+    }
+
+    private func stopTimer() {
+        timer?.invalidate()
+        timer = nil
     }
 }
 

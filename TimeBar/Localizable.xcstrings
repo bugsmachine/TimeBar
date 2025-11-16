@@ -11,18 +11,6 @@
         }
       }
     },
-    "+8" : {
-
-    },
-    "☀︎" : {
-
-    },
-    "🇨🇳" : {
-
-    },
-    "14:30" : {
-
-    },
     "About TimeBar" : {
       "localizations" : {
         "zh-Hans" : {
@@ -164,10 +152,10 @@
     "Component Order" : {
 
     },
-    "Display Options" : {
+    "Drag to reorder components shown in the menu bar" : {
 
     },
-    "Drag to reorder components shown in the menu bar" : {
+    "e.g., Home, Office, Beijing" : {
 
     },
     "General" : {
@@ -216,6 +204,9 @@
           }
         }
       }
+    },
+    "Location Name:" : {
+
     },
     "Quit TimeBar" : {
       "localizations" : {
@@ -282,6 +273,7 @@
       }
     },
     "Show Country Flag" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -301,6 +293,9 @@
           }
         }
       }
+    },
+    "Show Flag/Name" : {
+
     },
     "Show Settings Window at Startup" : {
       "localizations" : {
@@ -333,6 +328,7 @@
       }
     },
     "Time Zone" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -341,6 +337,9 @@
           }
         }
       }
+    },
+    "Time Zone Settings" : {
+
     },
     "Time Zone:" : {
       "localizations" : {

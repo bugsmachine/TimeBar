@@ -6,32 +6,24 @@
         "comment": "",
         "key": "General",
         "location": {
-          "startingColumn": 29,
-          "startingLine": 60
-        }
-      },
-      {
-        "comment": "",
-        "key": "Time Zone",
-        "location": {
-          "startingColumn": 29,
-          "startingLine": 62
+          "startingColumn": 25,
+          "startingLine": 59
         }
       },
       {
         "comment": "",
         "key": "Appearance",
         "location": {
-          "startingColumn": 29,
-          "startingLine": 64
+          "startingColumn": 25,
+          "startingLine": 61
         }
       },
       {
         "comment": "",
         "key": "TimeBar Settings",
         "location": {
-          "startingColumn": 29,
-          "startingLine": 67
+          "startingColumn": 25,
+          "startingLine": 63
         }
       },
       {
@@ -39,15 +31,7 @@
         "key": "General",
         "location": {
           "startingColumn": 23,
-          "startingLine": 76
-        }
-      },
-      {
-        "comment": "",
-        "key": "Time Zone",
-        "location": {
-          "startingColumn": 23,
-          "startingLine": 80
+          "startingLine": 72
         }
       },
       {
@@ -55,7 +39,7 @@
         "key": "Appearance",
         "location": {
           "startingColumn": 23,
-          "startingLine": 83
+          "startingLine": 76
         }
       },
       {
@@ -63,7 +47,7 @@
         "key": "Select a category",
         "location": {
           "startingColumn": 22,
-          "startingLine": 102
+          "startingLine": 93
         }
       },
       {
@@ -71,7 +55,7 @@
         "key": "Startup Settings",
         "location": {
           "startingColumn": 26,
-          "startingLine": 159
+          "startingLine": 150
         }
       },
       {
@@ -79,7 +63,7 @@
         "key": "Update Settings",
         "location": {
           "startingColumn": 26,
-          "startingLine": 192
+          "startingLine": 183
         }
       },
       {
@@ -87,7 +71,7 @@
         "key": "Language:",
         "location": {
           "startingColumn": 34,
-          "startingLine": 137
+          "startingLine": 128
         }
       },
       {
@@ -95,7 +79,7 @@
         "key": "",
         "location": {
           "startingColumn": 36,
-          "startingLine": 140
+          "startingLine": 131
         }
       },
       {
@@ -103,7 +87,7 @@
         "key": "Launch at Login",
         "location": {
           "startingColumn": 34,
-          "startingLine": 167
+          "startingLine": 158
         }
       },
       {
@@ -111,7 +95,7 @@
         "key": "",
         "location": {
           "startingColumn": 36,
-          "startingLine": 170
+          "startingLine": 161
         }
       },
       {
@@ -119,7 +103,7 @@
         "key": "Show Settings Window at Startup",
         "location": {
           "startingColumn": 34,
-          "startingLine": 175
+          "startingLine": 166
         }
       },
       {
@@ -127,7 +111,7 @@
         "key": "",
         "location": {
           "startingColumn": 36,
-          "startingLine": 178
+          "startingLine": 169
         }
       },
       {
@@ -135,7 +119,7 @@
         "key": "Automatically Check for Updates",
         "location": {
           "startingColumn": 34,
-          "startingLine": 200
+          "startingLine": 191
         }
       },
       {
@@ -143,7 +127,7 @@
         "key": "",
         "location": {
           "startingColumn": 36,
-          "startingLine": 203
+          "startingLine": 194
         }
       },
       {
@@ -151,7 +135,7 @@
         "key": "Automatically Download Updates",
         "location": {
           "startingColumn": 34,
-          "startingLine": 210
+          "startingLine": 201
         }
       },
       {
@@ -159,7 +143,7 @@
         "key": "",
         "location": {
           "startingColumn": 36,
-          "startingLine": 213
+          "startingLine": 204
         }
       },
       {
@@ -167,7 +151,7 @@
         "key": "TimeBar v1.6.3",
         "location": {
           "startingColumn": 30,
-          "startingLine": 236
+          "startingLine": 227
         }
       },
       {
@@ -175,87 +159,23 @@
         "key": "Check for Updates...",
         "location": {
           "startingColumn": 34,
-          "startingLine": 232
+          "startingLine": 223
+        }
+      },
+      {
+        "comment": "",
+        "key": "Time Zone Settings",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 315
         }
       },
       {
         "comment": "",
         "key": "Time Zone:",
         "location": {
-          "startingColumn": 34,
-          "startingLine": 299
-        }
-      },
-      {
-        "comment": "",
-        "key": "",
-        "location": {
-          "startingColumn": 36,
-          "startingLine": 302
-        }
-      },
-      {
-        "comment": "",
-        "key": "Show Country Flag",
-        "location": {
-          "startingColumn": 34,
-          "startingLine": 316
-        }
-      },
-      {
-        "comment": "",
-        "key": "",
-        "location": {
-          "startingColumn": 36,
-          "startingLine": 319
-        }
-      },
-      {
-        "comment": "",
-        "key": "Show Time Difference",
-        "location": {
-          "startingColumn": 34,
-          "startingLine": 328
-        }
-      },
-      {
-        "comment": "",
-        "key": "",
-        "location": {
-          "startingColumn": 36,
-          "startingLine": 331
-        }
-      },
-      {
-        "comment": "",
-        "key": "Component Order",
-        "location": {
-          "startingColumn": 18,
-          "startingLine": 383
-        }
-      },
-      {
-        "comment": "",
-        "key": "Drag to reorder components shown in the menu bar",
-        "location": {
-          "startingColumn": 18,
-          "startingLine": 387
-        }
-      },
-      {
-        "comment": "",
-        "key": "Display Options",
-        "location": {
-          "startingColumn": 18,
-          "startingLine": 457
-        }
-      },
-      {
-        "comment": "",
-        "key": "Show Time Difference",
-        "location": {
           "startingColumn": 26,
-          "startingLine": 463
+          "startingLine": 322
         }
       },
       {
@@ -263,39 +183,71 @@
         "key": "",
         "location": {
           "startingColumn": 28,
-          "startingLine": 466
+          "startingLine": 325
         }
       },
       {
         "comment": "",
-        "key": "🇨🇳",
+        "key": "Location Name:",
         "location": {
-          "startingColumn": 25,
-          "startingLine": 564
+          "startingColumn": 26,
+          "startingLine": 338
         }
       },
       {
         "comment": "",
-        "key": "14:30",
+        "key": "e.g., Home, Office, Beijing",
         "location": {
-          "startingColumn": 25,
-          "startingLine": 566
+          "startingColumn": 31,
+          "startingLine": 341
         }
       },
       {
         "comment": "",
-        "key": "+8",
+        "key": "Show Flag/Name",
         "location": {
-          "startingColumn": 25,
-          "startingLine": 568
+          "startingColumn": 26,
+          "startingLine": 350
         }
       },
       {
         "comment": "",
-        "key": "☀︎",
+        "key": "",
         "location": {
-          "startingColumn": 25,
-          "startingLine": 570
+          "startingColumn": 28,
+          "startingLine": 353
+        }
+      },
+      {
+        "comment": "",
+        "key": "Show Time Difference",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 361
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 364
+        }
+      },
+      {
+        "comment": "",
+        "key": "Component Order",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 386
+        }
+      },
+      {
+        "comment": "",
+        "key": "Drag to reorder components shown in the menu bar",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 390
         }
       }
     ]

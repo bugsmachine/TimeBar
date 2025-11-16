@@ -52,6 +52,14 @@ class UserSettings: ObservableObject {
             objectWillChange.send()
         }
     }
+
+    // 存储时区的自定义昵称/标签
+    @Published var timeZoneNickname: String = "" {
+        didSet {
+            UserDefaults.standard.set(timeZoneNickname, forKey: "timeZoneNickname")
+            objectWillChange.send()
+        }
+    }
     
     // 存储用户选择的语言
     @Published var selectedLanguage: AppLanguage = .system {
@@ -124,6 +132,11 @@ class UserSettings: ObservableObject {
 
         showFlag = UserDefaults.standard.bool(forKey: "showFlag")
         showTimeDifference = UserDefaults.standard.bool(forKey: "showTimeDifference")
+
+        // 加载时区昵称
+        if let savedNickname = UserDefaults.standard.string(forKey: "timeZoneNickname") {
+            timeZoneNickname = savedNickname
+        }
 
         // 加载语言设置
         if let savedLanguageRaw = UserDefaults.standard.string(forKey: "selectedLanguage"),
