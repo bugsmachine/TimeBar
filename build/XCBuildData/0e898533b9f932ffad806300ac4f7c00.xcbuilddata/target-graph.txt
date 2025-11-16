@@ -1,4 +1,0 @@
-Target dependency graph (2 targets)
-Target 'TimeBar' in project 'TimeBar'
-➜ Explicit dependency on target 'Sparkle' in project 'Sparkle'
-Target 'Sparkle' in project 'Sparkle' (no dependencies)
