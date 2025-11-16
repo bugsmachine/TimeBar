@@ -3,6 +3,38 @@
     <channel>
         <title>TimeBar</title>
         <item>
+            <title>1.0.0 - Official Release</title>
+            <pubDate>Sun, 16 Nov 2025 02:35:51 +0000</pubDate>
+            <sparkle:version>6</sparkle:version>
+            <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+            <description><![CDATA[
+                <h2>🎉 TimeBar v1.0.0 - Official Release</h2>
+                <p>TimeBar is now available as a public release! An elegant macOS menu bar app for tracking time zones of colleagues, family, and friends around the world.</p>
+
+                <h3>✨ Key Features</h3>
+                <ul>
+                    <li><strong>Multiple Time Zone Display</strong>: Show additional time zones directly in your menu bar</li>
+                    <li><strong>Country Flags</strong>: Visual indicators with country/region flags for quick identification</li>
+                    <li><strong>Time Difference</strong>: See the time offset from your local timezone at a glance</li>
+                    <li><strong>Multi-language Support</strong>: Available in English, Simplified Chinese, and Traditional Chinese</li>
+                    <li><strong>Auto Updates</strong>: Built-in update checks via Sparkle framework</li>
+                    <li><strong>Highly Customizable</strong>: Rich settings to personalize components order, appearance, and more</li>
+                    <li><strong>Lightweight & Efficient</strong>: Minimal resource usage as a menu bar utility</li>
+                </ul>
+
+                <h3>🐛 Bug Fixes</h3>
+                <ul>
+                    <li>Fixed dock icon not appearing when opening the About window</li>
+                </ul>
+
+                <h3>📝 Important Note</h3>
+                <p>Since this app is not signed with an Apple Developer subscription, you may see a security warning when launching it. Please manually allow it in <strong>System Settings &gt; Privacy &amp; Security &gt; App Management</strong>.</p>
+                <p>The entire app is fully <strong>open source</strong> and can be inspected on <a href="https://github.com/bugsmachine/TimeBar">GitHub</a> - it's completely safe to use!</p>
+            ]]></description>
+            <sparkle:minimumSystemVersion>14.1</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/bugsmachine/TimeBar/releases/download/v1.0.0/TimeBar.zip" length="7006259" type="application/octet-stream" sparkle:edSignature="A9tGMJs8YfDqhc5WncP9iFIk1poYdDppP4lRKz+Jcp80ijBP97FtbvXj6v66r5i7gtKJygJ36rVcMEHqMH1bAw=="/>
+        </item>
+        <item>
             <title>0.1.3</title>
             <pubDate>Sun, 21 Sep 2025 00:30:27 +0100</pubDate>
             <sparkle:version>5</sparkle:version>

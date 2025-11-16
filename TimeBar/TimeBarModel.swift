@@ -87,12 +87,12 @@ final class LanguageManager {
 // TimeBar模型类
 class TimeBarModel: ObservableObject {
     static let shared = TimeBarModel()
-    
+
     // 语言选项数据
     let languageOptions = AppLanguage.allCases
-    
+
     var isSettingsWindowOpen = false
-    
+
     private init() {}
     
     // 获取语言选项的显示名称

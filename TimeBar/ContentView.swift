@@ -23,9 +23,7 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Button("About TimeBar") {
-                            // "关于"面板也需要 App 处于激活状态才能显示
-                            NSApp.setActivationPolicy(.regular)
-                            // 调用系统标准的"关于"面板
+                            // Show About panel without dock icon
                             NSApp.orderFrontStandardAboutPanel(nil)
                             NSApp.activate(ignoringOtherApps: true)
                         }
