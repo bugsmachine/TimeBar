@@ -1,0 +1,56 @@
+{
+  "" : {
+    "const-values" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeBar-primary.swiftconstvalues",
+    "dependencies" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeBar-primary.d",
+    "diagnostics" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeBar-primary.dia",
+    "emit-module-dependencies" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeBar-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeBar-primary-emit-module.dia",
+    "pch" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeBar-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeBar-primary.swiftdeps"
+  },
+  "/Users/University and Study/Xcode Project/TimeBar/TimeBar/ContentView.swift" : {
+    "index-unit-output-path" : "/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/ContentView.o"
+  },
+  "/Users/University and Study/Xcode Project/TimeBar/TimeBar/MenuBarLabelView.swift" : {
+    "index-unit-output-path" : "/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/MenuBarLabelView.o",
+    "llvm-bc" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/MenuBarLabelView.bc",
+    "object" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/MenuBarLabelView.o"
+  },
+  "/Users/University and Study/Xcode Project/TimeBar/TimeBar/Settings/SettingsView.swift" : {
+    "index-unit-output-path" : "/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/SettingsView.o",
+    "llvm-bc" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/SettingsView.bc",
+    "object" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/SettingsView.o"
+  },
+  "/Users/University and Study/Xcode Project/TimeBar/TimeBar/Settings/UserSettings.swift" : {
+    "index-unit-output-path" : "/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/UserSettings.o",
+    "llvm-bc" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/UserSettings.bc",
+    "object" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/UserSettings.o"
+  },
+  "/Users/University and Study/Xcode Project/TimeBar/TimeBar/TimeBarApp.swift" : {
+    "index-unit-output-path" : "/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeBarApp.o",
+    "llvm-bc" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeBarApp.bc",
+    "object" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeBarApp.o"
+  },
+  "/Users/University and Study/Xcode Project/TimeBar/TimeBar/TimeBarModel.swift" : {
+    "index-unit-output-path" : "/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeBarModel.o",
+    "llvm-bc" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeBarModel.bc",
+    "object" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeBarModel.o"
+  },
+  "/Users/University and Study/Xcode Project/TimeBar/TimeBar/TimeZoneCountry.swift" : {
+    "index-unit-output-path" : "/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeZoneCountry.o",
+    "llvm-bc" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeZoneCountry.bc",
+    "object" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/TimeZoneCountry.o"
+  },
+  "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "index-unit-output-path" : "/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.o"
+  },
+  "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/DerivedSources/GeneratedStringSymbols_Localizable.swift" : {
+    "index-unit-output-path" : "/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/GeneratedStringSymbols_Localizable.o",
+    "llvm-bc" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/GeneratedStringSymbols_Localizable.bc",
+    "object" : "/Users/University and Study/Xcode Project/TimeBar/build/TimeBar.build/Release/TimeBar.build/Objects-normal/arm64/GeneratedStringSymbols_Localizable.o"
+  }
+}

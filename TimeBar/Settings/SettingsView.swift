@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import Sparkle
 
 
 
@@ -51,9 +52,9 @@ enum SettingsTab: Hashable {
 struct SettingsView: View {
     @ObservedObject var settings: UserSettings
     @State private var selectedTab: SettingsTab? = .general
+    var updater: SPUUpdater?
 
-   
-        private var navigationTitle: Text {
+    private var navigationTitle: Text {
             switch selectedTab {
             case .general:
                 return Text("General")
@@ -92,7 +93,7 @@ struct SettingsView: View {
             // 根据侧边栏的选择，显示不同的视图
             switch selectedTab {
             case .general:
-                GeneralSettingsView(settings: settings)
+                GeneralSettingsView(settings: settings, updater: updater)
             case .time:
                 TimeZoneSettingsView(settings: settings)
             case .appearance:
@@ -113,13 +114,15 @@ struct SettingsView: View {
 struct GeneralSettingsView: View {
     @ObservedObject var settings: UserSettings
     @StateObject private var timeBarModel = TimeBarModel.shared
-    
+
     // ... (State 变量等保持不变)
     @State private var showAlert = false
     @State private var alertTitle: String = ""
     @State private var alertMessage: String = ""
     @State private var restartButtonText: String = ""
     @State private var laterButtonText: String = ""
+
+    var updater: SPUUpdater?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -164,15 +167,15 @@ struct GeneralSettingsView: View {
                             Text("Launch at Login")
                                 .fontWeight(.medium)
                             Spacer()
-                            Toggle("", isOn: .constant(true))
+                            Toggle("", isOn: $settings.launchAtLogin)
                                 .toggleStyle(.switch)
                         }
-                        
+
                         HStack {
                             Text("Show Settings Window at Startup")
                                 .fontWeight(.medium)
                             Spacer()
-                            Toggle("", isOn: .constant(false))
+                            Toggle("", isOn: $settings.showSettingsWindowAtStartup)
                                 .toggleStyle(.switch)
                         }
                     }
@@ -197,17 +200,17 @@ struct GeneralSettingsView: View {
                             Text("Automatically Check for Updates")
                                 .fontWeight(.medium)
                             Spacer()
-                            Toggle("", isOn: .constant(true))
+                            Toggle("", isOn: $settings.automaticallyCheckForUpdates)
                                 .toggleStyle(.switch)
                         }
-                        
+
                         Divider().padding(.horizontal, 4)
-                        
+
                         HStack {
                             Text("Automatically Download Updates")
                                 .fontWeight(.medium)
                             Spacer()
-                            Toggle("", isOn: .constant(false))
+                            Toggle("", isOn: $settings.automaticallyDownloadUpdates)
                                 .toggleStyle(.switch)
                         }
                     }
@@ -222,21 +225,19 @@ struct GeneralSettingsView: View {
                     
                     
                     // MARK: - 检查更新按钮和版本信息 (居中)
-                    // !!! 样式修改：移除 alignment: .leading, 使用默认的 center 对齐 !!!
-                    VStack(spacing: 8) { // 稍微减小间距
+                    VStack(spacing: 8) {
                         Button(action: {
-                            print("Check for Updates...")
+                            updater?.checkForUpdates()
                         }) {
                             Text("Check for Updates...")
                         }
                         .buttonStyle(.bordered)
-                        
+
                         Text("TimeBar v1.6.3")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                     .padding(.top, 10)
-                    // !!! 样式修改：让 VStack 撑满宽度以实现居中 !!!
                     .frame(maxWidth: .infinity, alignment: .center)
 
                 }
@@ -360,11 +361,12 @@ struct AppearanceSettingsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 18) {
                     ComponentOrderSection(settings: settings, draggedComponent: $draggedComponent)
                     DisplayOptionsSection(settings: settings)
                 }
                 .padding(.vertical, 8)
+                .padding(.horizontal, 20)
             }
         }
         .background(Color(NSColor.windowBackgroundColor))
@@ -381,12 +383,10 @@ struct ComponentOrderSection: View {
             Text("Component Order")
                 .font(.headline)
                 .fontWeight(.medium)
-                .padding(.horizontal, 12)
 
             Text("Drag to reorder components shown in the menu bar")
                 .font(.caption)
                 .foregroundColor(.secondary)
-                .padding(.horizontal, 12)
 
             ComponentListView(settings: settings, draggedComponent: $draggedComponent)
         }
@@ -423,7 +423,6 @@ struct ComponentListView: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.gray.opacity(0.3), lineWidth: 1)
         )
-        .padding(.horizontal, 12)
     }
 }
 
@@ -458,7 +457,6 @@ struct DisplayOptionsSection: View {
             Text("Display Options")
                 .font(.headline)
                 .fontWeight(.medium)
-                .padding(.horizontal, 12)
 
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
@@ -479,7 +477,6 @@ struct DisplayOptionsSection: View {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.gray.opacity(0.3), lineWidth: 1)
             )
-            .padding(.horizontal, 12)
         }
     }
 
@@ -613,6 +610,6 @@ struct ComponentDropDelegate: DropDelegate {
 }
 
 #Preview {
-    SettingsView(settings: UserSettings())
+    SettingsView(settings: UserSettings(), updater: nil)
         .frame(width: 700, height: 400)
 }

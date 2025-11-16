@@ -1,0 +1,304 @@
+{
+  "source": "/Users/University and Study/Xcode Project/TimeBar/TimeBar/Settings/SettingsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "General",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 60
+        }
+      },
+      {
+        "comment": "",
+        "key": "Time Zone",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 62
+        }
+      },
+      {
+        "comment": "",
+        "key": "Appearance",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 64
+        }
+      },
+      {
+        "comment": "",
+        "key": "TimeBar Settings",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 67
+        }
+      },
+      {
+        "comment": "",
+        "key": "General",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 76
+        }
+      },
+      {
+        "comment": "",
+        "key": "Time Zone",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 80
+        }
+      },
+      {
+        "comment": "",
+        "key": "Appearance",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 83
+        }
+      },
+      {
+        "comment": "",
+        "key": "Select a category",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 102
+        }
+      },
+      {
+        "comment": "",
+        "key": "Startup Settings",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 159
+        }
+      },
+      {
+        "comment": "",
+        "key": "Update Settings",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 192
+        }
+      },
+      {
+        "comment": "",
+        "key": "Language:",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 137
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 140
+        }
+      },
+      {
+        "comment": "",
+        "key": "Launch at Login",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 167
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 170
+        }
+      },
+      {
+        "comment": "",
+        "key": "Show Settings Window at Startup",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 175
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 178
+        }
+      },
+      {
+        "comment": "",
+        "key": "Automatically Check for Updates",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 200
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 203
+        }
+      },
+      {
+        "comment": "",
+        "key": "Automatically Download Updates",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 210
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 213
+        }
+      },
+      {
+        "comment": "",
+        "key": "TimeBar v1.6.3",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 236
+        }
+      },
+      {
+        "comment": "",
+        "key": "Check for Updates...",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 232
+        }
+      },
+      {
+        "comment": "",
+        "key": "Time Zone:",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 299
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 302
+        }
+      },
+      {
+        "comment": "",
+        "key": "Show Country Flag",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 316
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 319
+        }
+      },
+      {
+        "comment": "",
+        "key": "Show Time Difference",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 328
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 331
+        }
+      },
+      {
+        "comment": "",
+        "key": "Component Order",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 383
+        }
+      },
+      {
+        "comment": "",
+        "key": "Drag to reorder components shown in the menu bar",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 387
+        }
+      },
+      {
+        "comment": "",
+        "key": "Display Options",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 457
+        }
+      },
+      {
+        "comment": "",
+        "key": "Show Time Difference",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 463
+        }
+      },
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 466
+        }
+      },
+      {
+        "comment": "",
+        "key": "🇨🇳",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 564
+        }
+      },
+      {
+        "comment": "",
+        "key": "14:30",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 566
+        }
+      },
+      {
+        "comment": "",
+        "key": "+8",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 568
+        }
+      },
+      {
+        "comment": "",
+        "key": "☀︎",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 570
+        }
+      }
+    ]
+  },
+  "version": 1
+}

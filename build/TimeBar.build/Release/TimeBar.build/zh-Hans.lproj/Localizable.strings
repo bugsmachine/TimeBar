@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key></key>
+	<string> </string>
+	<key>About TimeBar</key>
+	<string>关于TimeBar</string>
+	<key>Appearance</key>
+	<string>外观</string>
+	<key>Check for Updates...</key>
+	<string>检查更新…</string>
+	<key>Check for Updates…</key>
+	<string>检查更新…</string>
+	<key>General</key>
+	<string>一般设置</string>
+	<key>Language</key>
+	<string>语言: </string>
+	<key>Language:</key>
+	<string>语言：</string>
+	<key>Launch at Login</key>
+	<string>开机自启动</string>
+	<key>Quit TimeBar</key>
+	<string>退出TimeBar</string>
+	<key>Select a category</key>
+	<string>选择一个种类</string>
+	<key>Settings</key>
+	<string>设置</string>
+	<key>Settings...</key>
+	<string>设置…</string>
+	<key>Settings…</key>
+	<string>设置…</string>
+	<key>Show Country Flag</key>
+	<string>显示国旗（否则显示城市名称）</string>
+	<key>Show Flag (instead of City Name) </key>
+	<string>显示国旗（否则显示城市名称）</string>
+	<key>Show Settings Window at Startup</key>
+	<string>启动时打开弹窗</string>
+	<key>Show Time Difference</key>
+	<string>显示时差</string>
+	<key>Startup Settings</key>
+	<string>开机设置</string>
+	<key>Time Zone</key>
+	<string>时区</string>
+	<key>Time Zone:</key>
+	<string>选择时区： </string>
+	<key>Time Zone: </key>
+	<string>选择时区：</string>
+	<key>TimeBar Settings</key>
+	<string>啊啊啊伤心啊</string>
+	<key>alert.restart.button.later</key>
+	<string>稍后</string>
+	<key>alert.restart.button.now</key>
+	<string>立即重启</string>
+	<key>alert.restart.message</key>
+	<string>需要重启应用以使新的语言设置生效。</string>
+	<key>alert.restart.title</key>
+	<string>语言已更改</string>
+</dict>
+</plist>

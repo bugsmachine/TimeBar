@@ -1,5 +1,7 @@
 import Foundation
 internal import Combine
+import ServiceManagement
+import AppKit
 
 // 菜单栏中可显示的组件类型
 enum MenuBarComponent: String, CaseIterable, Codable {
@@ -79,6 +81,41 @@ class UserSettings: ObservableObject {
         }
     }
 
+    // 存储是否在登录时启动应用
+    @Published var launchAtLogin: Bool = false {
+        didSet {
+            UserDefaults.standard.set(launchAtLogin, forKey: "launchAtLogin")
+            objectWillChange.send()
+            updateLaunchAtLogin()
+        }
+    }
+
+    // 存储是否在启动时显示设置窗口
+    @Published var showSettingsWindowAtStartup: Bool = false {
+        didSet {
+            UserDefaults.standard.set(showSettingsWindowAtStartup, forKey: "showSettingsWindowAtStartup")
+            objectWillChange.send()
+        }
+    }
+
+    // 存储是否自动检查更新
+    @Published var automaticallyCheckForUpdates: Bool = true {
+        didSet {
+            UserDefaults.standard.set(automaticallyCheckForUpdates, forKey: "automaticallyCheckForUpdates")
+            objectWillChange.send()
+            updateAutomaticUpdateCheck()
+        }
+    }
+
+    // 存储是否自动下载更新
+    @Published var automaticallyDownloadUpdates: Bool = false {
+        didSet {
+            UserDefaults.standard.set(automaticallyDownloadUpdates, forKey: "automaticallyDownloadUpdates")
+            objectWillChange.send()
+            updateAutomaticUpdateDownload()
+        }
+    }
+
     init() {
         // 从UserDefaults加载保存的设置
         if let savedTimeZone = UserDefaults.standard.string(forKey: "timeZoneIdentifier") {
@@ -105,5 +142,147 @@ class UserSettings: ObservableObject {
         if savedIndex > 0 {
             timeDifferenceLastIndex = savedIndex
         }
+
+        // 加载启动设置
+        launchAtLogin = UserDefaults.standard.bool(forKey: "launchAtLogin")
+        showSettingsWindowAtStartup = UserDefaults.standard.bool(forKey: "showSettingsWindowAtStartup")
+
+        // 加载更新设置
+        if UserDefaults.standard.object(forKey: "automaticallyCheckForUpdates") == nil {
+            // 如果之前没有保存过，使用默认值 true
+            automaticallyCheckForUpdates = true
+        } else {
+            automaticallyCheckForUpdates = UserDefaults.standard.bool(forKey: "automaticallyCheckForUpdates")
+        }
+        automaticallyDownloadUpdates = UserDefaults.standard.bool(forKey: "automaticallyDownloadUpdates")
+
+        // 初始化时更新启动项和更新设置
+        updateLaunchAtLogin()
+        updateAutomaticUpdateCheck()
+        updateAutomaticUpdateDownload()
+    }
+
+    // MARK: - Launch at Login Implementation
+    private func updateLaunchAtLogin() {
+        #if os(macOS)
+        if #available(macOS 13.0, *) {
+            let service = SMAppService.mainApp
+
+            // Debug: Check app's code signing status
+            debugPrintCodeSigningStatus()
+
+            do {
+                if launchAtLogin {
+                    // Try to register for launch at login
+                    if service.status != .enabled {
+                        try service.register()
+                        print("✅ Successfully registered app to launch at login")
+                    } else {
+                        print("ℹ️ App is already registered to launch at login")
+                    }
+                } else {
+                    // Try to unregister from launch at login
+                    if service.status == .enabled {
+                        try service.unregister()
+                        print("✅ Successfully unregistered app from launch at login")
+                    } else {
+                        print("ℹ️ App is not registered to launch at login")
+                    }
+                }
+            } catch {
+                // Handle any error
+                let errorDescription = error.localizedDescription
+                let errorCode = (error as NSError).code
+                print("❌ Failed to update launch at login: \(errorDescription) (Code: \(errorCode))")
+
+                DispatchQueue.main.async {
+                    // Revert the toggle if operation failed
+                    self.launchAtLogin = !self.launchAtLogin
+                }
+
+                // Show detailed error notification
+                showLaunchAtLoginError(errorDescription, errorCode: errorCode)
+            }
+        }
+        #endif
+    }
+
+    // Debug function to check code signing status
+    private func debugPrintCodeSigningStatus() {
+        if let executablePath = Bundle.main.executablePath {
+            print("📱 App executable: \(executablePath)")
+
+            // Try to get code signing info
+            let task = Process()
+            task.launchPath = "/usr/bin/codesign"
+            task.arguments = ["-v", "-v", executablePath]
+
+            let pipe = Pipe()
+            task.standardError = pipe
+            task.standardOutput = pipe
+
+            do {
+                try task.run()
+                task.waitUntilExit()
+
+                let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                if let output = String(data: data, encoding: .utf8) {
+                    print("📋 Code signing info:\n\(output)")
+                }
+            } catch {
+                print("⚠️ Could not check code signing: \(error)")
+            }
+        }
+    }
+
+    // Helper to show detailed error notification
+    private func showLaunchAtLoginError(_ errorDescription: String, errorCode: Int) {
+        DispatchQueue.main.async {
+            let alert = NSAlert()
+            alert.messageText = "Cannot Update Launch at Login"
+
+            // Provide specific guidance based on error code
+            var detailedMessage = ""
+            if errorCode == 1 {
+                detailedMessage = """
+                The app is not properly code-signed. This is required for the "Launch at Login" feature on macOS 13.0+.
+
+                To fix this:
+                1. In Xcode, select the TimeBar project
+                2. Go to Build Settings
+                3. Make sure "Signing Certificate" is set to a valid Apple Development certificate
+                4. Ensure the "Team ID" is correctly set
+
+                Error: \(errorDescription)
+                """
+            } else {
+                detailedMessage = """
+                Failed to register app for launch at login.
+
+                Error: \(errorDescription) (Code: \(errorCode))
+
+                This may require your Apple Developer account or proper code signing credentials.
+                """
+            }
+
+            alert.informativeText = detailedMessage
+            alert.addButton(withTitle: "OK")
+            alert.alertStyle = .warning
+            alert.runModal()
+        }
+    }
+
+    // MARK: - Automatic Update Check Implementation
+    private func updateAutomaticUpdateCheck() {
+        // This will be handled by Sparkle configuration
+        // The updater will use this setting to determine if automatic checks are enabled
+        NotificationCenter.default.post(name: NSNotification.Name("UpdateSettingsChanged"), object: nil)
+    }
+
+    // MARK: - Automatic Download Implementation
+    private func updateAutomaticUpdateDownload() {
+        // This will be handled by Sparkle configuration
+        // The updater will use this setting to determine if automatic downloads are enabled
+        NotificationCenter.default.post(name: NSNotification.Name("UpdateSettingsChanged"), object: nil)
     }
 }
