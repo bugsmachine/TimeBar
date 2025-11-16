@@ -4,6 +4,7 @@
 
 **Elegantly display additional time zones in your macOS menu bar**
 
+[🇺🇸 English](#-timebar) | [🇨🇳 中文](https://github.com/bugsmachine/TimeBar/blob/main/README-zh.MD)
 
 <img src="https://raw.githubusercontent.com/bugsmachine/TimeBar/refs/heads/main/TimeBarIcon-T.png" width="128" alt="TimeBar Icon">
 
@@ -11,7 +12,7 @@
 
 A lightweight, elegant macOS menu bar application for tracking time zones of colleagues, family, and friends around the world.
 
-[**Download**](#-installation) • [**Features**](#-features) • [**FAQ**](#-faq) • [**License**](#-license)
+[**Download**](#-installation) • [**Features**](#-features) • [**License**](#-license)
 
 </div>
 
