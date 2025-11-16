@@ -14,6 +14,7 @@ struct MenuBarLabelView: View {
     @State private var timeDifference: String = ""
 
     var body: some View {
+        
         Text(buildMenuBarTextWithSymbols())
             .font(.system(.body, design: .monospaced))
             .foregroundColor(.primary)
@@ -36,30 +37,34 @@ struct MenuBarLabelView: View {
                         print("ShowTimeDifference changed to: \(settings.showTimeDifference)")
                         updateMenuBar()
                     }
+                    .onChange(of: settings.componentOrder) {
+                        print("Component order changed")
+                        updateMenuBar()
+                    }
     }
     
     private func buildMenuBarTextWithSymbols() -> String {
         var components: [String] = []
-        
-        // 1. 国旗或城市名 (总是显示prefix，无论是国旗还是城市名)
-        if !prefix.isEmpty {
-            components.append(prefix)
+
+        // 根据用户设置的顺序构建菜单栏显示内容
+        for component in settings.componentOrder {
+            switch component {
+            case .flag:
+                if !prefix.isEmpty {
+                    components.append(prefix)
+                }
+            case .time:
+                components.append(timeString)
+            case .timeDifference:
+                if settings.showTimeDifference && !timeDifference.isEmpty {
+                    components.append(timeDifference)
+                }
+            case .dayNight:
+                let symbolChar = (dayNightIconName == "sun.max.fill") ? "☀︎" : "☽"
+                components.append(symbolChar)
+            }
         }
-        
-        // 2. 时间
-        components.append(timeString)
-        
-        // 3. 时差
-        if settings.showTimeDifference && !timeDifference.isEmpty {
-            components.append(timeDifference)
-        }
-        
-        // 4. 昼夜图标 - 使用SF Symbol的Unicode字符
-        let symbolChar = (dayNightIconName == "sun.max.fill") ? "☀︎" : "☽"
-        components.append(symbolChar)
-        
-        
-        
+
         return components.joined(separator: " ")
     }
 

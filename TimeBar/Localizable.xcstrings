@@ -11,6 +11,18 @@
         }
       }
     },
+    "+8" : {
+
+    },
+    "☀︎" : {
+
+    },
+    "🇨🇳" : {
+
+    },
+    "14:30" : {
+
+    },
     "About TimeBar" : {
       "localizations" : {
         "zh-Hans" : {
@@ -123,9 +135,6 @@
         }
       }
     },
-    "Appearance settings will go here." : {
-
-    },
     "Automatically Check for Updates" : {
 
     },
@@ -151,6 +160,15 @@
           }
         }
       }
+    },
+    "Component Order" : {
+
+    },
+    "Display Options" : {
+
+    },
+    "Drag to reorder components shown in the menu bar" : {
+
     },
     "General" : {
       "localizations" : {

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 
 
@@ -95,9 +96,7 @@ struct SettingsView: View {
             case .time:
                 TimeZoneSettingsView(settings: settings)
             case .appearance:
-                Text("Appearance settings will go here.")
-                    .foregroundColor(.secondary)
-                    .font(.title2)
+                AppearanceSettingsView(settings: settings)
             case .none:
                 Text("Select a category")
                     .foregroundColor(.secondary)
@@ -350,6 +349,234 @@ struct TimeZoneSettingsView: View {
             }
         }
         .background(Color(NSColor.windowBackgroundColor))
+    }
+}
+
+// --- 外观设置视图 ---
+struct AppearanceSettingsView: View {
+    @ObservedObject var settings: UserSettings
+    @State private var draggedComponent: MenuBarComponent?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    ComponentOrderSection(settings: settings, draggedComponent: $draggedComponent)
+                    DisplayOptionsSection(settings: settings)
+                }
+                .padding(.vertical, 8)
+            }
+        }
+        .background(Color(NSColor.windowBackgroundColor))
+    }
+}
+
+// --- 组件排序设置组 ---
+struct ComponentOrderSection: View {
+    @ObservedObject var settings: UserSettings
+    @Binding var draggedComponent: MenuBarComponent?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Component Order")
+                .font(.headline)
+                .fontWeight(.medium)
+                .padding(.horizontal, 12)
+
+            Text("Drag to reorder components shown in the menu bar")
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 12)
+
+            ComponentListView(settings: settings, draggedComponent: $draggedComponent)
+        }
+    }
+}
+
+// --- 水平可拖拽组件列表 ---
+struct ComponentListView: View {
+    @ObservedObject var settings: UserSettings
+    @Binding var draggedComponent: MenuBarComponent?
+
+    var body: some View {
+        HStack(spacing: 12) {
+            if settings.componentOrder.count > 0 {
+                SingleComponentView(
+                    component: settings.componentOrder[0],
+                    isBeingDragged: draggedComponent == settings.componentOrder[0],
+                    onDragChange: { value in draggedComponent = value ? settings.componentOrder[0] : nil },
+                    settings: settings
+                )
+            }
+            if settings.componentOrder.count > 1 {
+                SingleComponentView(
+                    component: settings.componentOrder[1],
+                    isBeingDragged: draggedComponent == settings.componentOrder[1],
+                    onDragChange: { value in draggedComponent = value ? settings.componentOrder[1] : nil },
+                    settings: settings
+                )
+            }
+            if settings.componentOrder.count > 2 {
+                SingleComponentView(
+                    component: settings.componentOrder[2],
+                    isBeingDragged: draggedComponent == settings.componentOrder[2],
+                    onDragChange: { value in draggedComponent = value ? settings.componentOrder[2] : nil },
+                    settings: settings
+                )
+            }
+            if settings.componentOrder.count > 3 {
+                SingleComponentView(
+                    component: settings.componentOrder[3],
+                    isBeingDragged: draggedComponent == settings.componentOrder[3],
+                    onDragChange: { value in draggedComponent = value ? settings.componentOrder[3] : nil },
+                    settings: settings
+                )
+            }
+        }
+        .padding()
+        .background(Color(NSColor.controlBackgroundColor))
+        .cornerRadius(8)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+        )
+    }
+}
+
+// --- 单个组件卡片 ---
+struct SingleComponentView: View {
+    let component: MenuBarComponent
+    let isBeingDragged: Bool
+    let onDragChange: (Bool) -> Void
+    @ObservedObject var settings: UserSettings
+
+    var body: some View {
+        ComponentDragDropView(
+            component: component,
+            isBeingDragged: isBeingDragged,
+            onDragChange: onDragChange,
+            settings: settings
+        )
+    }
+}
+
+// --- 显示选项设置组 ---
+struct DisplayOptionsSection: View {
+    @ObservedObject var settings: UserSettings
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Display Options")
+                .font(.headline)
+                .fontWeight(.medium)
+                .padding(.horizontal, 12)
+
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Text("Show Time Difference")
+                        .fontWeight(.medium)
+                    Spacer()
+                    Toggle("", isOn: $settings.showTimeDifference)
+                        .toggleStyle(.switch)
+                }
+            }
+            .padding()
+            .background(Color(NSColor.controlBackgroundColor))
+            .cornerRadius(8)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+            )
+            .padding(.horizontal, 12)
+        }
+    }
+}
+
+// --- 可拖拽的组件卡片视图 ---
+struct ComponentDragDropView: View {
+    let component: MenuBarComponent
+    let isBeingDragged: Bool
+    let onDragChange: (Bool) -> Void
+    @ObservedObject var settings: UserSettings
+
+    var body: some View {
+        VStack(spacing: 4) {
+            componentPreviewText
+                .font(.system(.body, design: .monospaced))
+                .foregroundColor(.primary)
+
+            Text(component.displayName)
+                .font(.caption2)
+                .foregroundColor(.secondary)
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(8)
+        .background(isBeingDragged ? Color.blue.opacity(0.2) : Color(NSColor.textBackgroundColor))
+        .cornerRadius(6)
+        .border(Color.gray.opacity(0.2), width: 1)
+        .opacity(isBeingDragged ? 0.7 : 1.0)
+        .onDrag {
+            onDragChange(true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                onDragChange(false)
+            }
+            return NSItemProvider(object: component.rawValue as NSString)
+        }
+        .onDrop(of: [UTType.utf8PlainText], delegate: ComponentDropDelegate(
+            component: component,
+            settings: settings
+        ))
+    }
+
+    private var componentPreviewText: Text {
+        switch component {
+        case .flag:
+            return Text("🇨🇳")
+        case .time:
+            return Text("14:30")
+        case .timeDifference:
+            return Text("+8")
+        case .dayNight:
+            return Text("☀︎")
+        }
+    }
+}
+
+// --- 拖放委托处理 ---
+struct ComponentDropDelegate: DropDelegate {
+    let component: MenuBarComponent
+    @ObservedObject var settings: UserSettings
+
+    func dropEntered(info: DropInfo) {
+        // 可以添加视觉反馈
+    }
+
+    func performDrop(info: DropInfo) -> Bool {
+        guard let itemProvider = info.itemProviders(for: [UTType.utf8PlainText]).first else {
+            return false
+        }
+
+        itemProvider.loadItem(forTypeIdentifier: UTType.utf8PlainText.identifier) { data, _ in
+            if let data = data as? Data, let sourceValue = String(data: data, encoding: .utf8) {
+                DispatchQueue.main.async {
+                    performSwap(with: sourceValue)
+                }
+            }
+        }
+        return true
+    }
+
+    private func performSwap(with sourceValue: String) {
+        guard let sourceComponent = MenuBarComponent(rawValue: sourceValue),
+              let sourceIndex = settings.componentOrder.firstIndex(of: sourceComponent),
+              let targetIndex = settings.componentOrder.firstIndex(of: component) else {
+            return
+        }
+
+        if sourceIndex != targetIndex {
+            settings.componentOrder.swapAt(sourceIndex, targetIndex)
+        }
     }
 }
 
