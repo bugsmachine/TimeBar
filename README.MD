@@ -4,7 +4,7 @@
 
 **Elegantly display additional time zones in your macOS menu bar**
 
-[🇺🇸 English](#-timebar) | [🇨🇳 中文](https://github.com/bugsmachine/TimeBar/blob/main/README-zh.MD)
+[🇺🇸 English](#-timebar) | [🇨🇳 中文](https://github.com/bugsmachine/TimeBar/blob/main/README-zh.md)
 
 <img src="https://raw.githubusercontent.com/bugsmachine/TimeBar/refs/heads/main/TimeBarIcon-T.png" width="128" alt="TimeBar Icon">
 
