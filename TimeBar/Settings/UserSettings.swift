@@ -62,11 +62,19 @@ class UserSettings: ObservableObject {
     }
 
     // 存储菜单栏组件的显示顺序
-    @Published var componentOrder: [MenuBarComponent] = [.flag, .time, .timeDifference, .dayNight] {
+    @Published var componentOrder: [MenuBarComponent] = [.flag, .time, .dayNight, .timeDifference] {
         didSet {
             if let encoded = try? JSONEncoder().encode(componentOrder) {
                 UserDefaults.standard.set(encoded, forKey: "componentOrder")
             }
+            objectWillChange.send()
+        }
+    }
+
+    // 存储时差组件上次被隐藏时的位置，用于重新显示时恢复位置
+    @Published var timeDifferenceLastIndex: Int = 3 {
+        didSet {
+            UserDefaults.standard.set(timeDifferenceLastIndex, forKey: "timeDifferenceLastIndex")
             objectWillChange.send()
         }
     }
@@ -90,6 +98,12 @@ class UserSettings: ObservableObject {
         if let savedComponentOrder = UserDefaults.standard.data(forKey: "componentOrder"),
            let decoded = try? JSONDecoder().decode([MenuBarComponent].self, from: savedComponentOrder) {
             componentOrder = decoded
+        }
+
+        // 加载时差组件的最后位置
+        let savedIndex = UserDefaults.standard.integer(forKey: "timeDifferenceLastIndex")
+        if savedIndex > 0 {
+            timeDifferenceLastIndex = savedIndex
         }
     }
 }

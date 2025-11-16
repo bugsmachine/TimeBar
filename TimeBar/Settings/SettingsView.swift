@@ -398,41 +398,24 @@ struct ComponentListView: View {
     @ObservedObject var settings: UserSettings
     @Binding var draggedComponent: MenuBarComponent?
 
+    private var visibleComponents: [MenuBarComponent] {
+        settings.componentOrder.filter { component in
+            component != .timeDifference || settings.showTimeDifference
+        }
+    }
+
     var body: some View {
-        HStack(spacing: 12) {
-            if settings.componentOrder.count > 0 {
+        HStack(spacing: 20) {
+            ForEach(Array(visibleComponents.enumerated()), id: \.offset) { _, component in
                 SingleComponentView(
-                    component: settings.componentOrder[0],
-                    isBeingDragged: draggedComponent == settings.componentOrder[0],
-                    onDragChange: { value in draggedComponent = value ? settings.componentOrder[0] : nil },
-                    settings: settings
-                )
-            }
-            if settings.componentOrder.count > 1 {
-                SingleComponentView(
-                    component: settings.componentOrder[1],
-                    isBeingDragged: draggedComponent == settings.componentOrder[1],
-                    onDragChange: { value in draggedComponent = value ? settings.componentOrder[1] : nil },
-                    settings: settings
-                )
-            }
-            if settings.componentOrder.count > 2 {
-                SingleComponentView(
-                    component: settings.componentOrder[2],
-                    isBeingDragged: draggedComponent == settings.componentOrder[2],
-                    onDragChange: { value in draggedComponent = value ? settings.componentOrder[2] : nil },
-                    settings: settings
-                )
-            }
-            if settings.componentOrder.count > 3 {
-                SingleComponentView(
-                    component: settings.componentOrder[3],
-                    isBeingDragged: draggedComponent == settings.componentOrder[3],
-                    onDragChange: { value in draggedComponent = value ? settings.componentOrder[3] : nil },
+                    component: component,
+                    isBeingDragged: draggedComponent == component,
+                    onDragChange: { value in draggedComponent = value ? component : nil },
                     settings: settings
                 )
             }
         }
+        .frame(maxWidth: .infinity, alignment: .center)
         .padding()
         .background(Color(NSColor.controlBackgroundColor))
         .cornerRadius(8)
@@ -440,6 +423,7 @@ struct ComponentListView: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.gray.opacity(0.3), lineWidth: 1)
         )
+        .padding(.horizontal, 12)
     }
 }
 
@@ -449,14 +433,19 @@ struct SingleComponentView: View {
     let isBeingDragged: Bool
     let onDragChange: (Bool) -> Void
     @ObservedObject var settings: UserSettings
+    @State private var isHovered = false
 
     var body: some View {
         ComponentDragDropView(
             component: component,
             isBeingDragged: isBeingDragged,
             onDragChange: onDragChange,
-            settings: settings
+            settings: settings,
+            isHovered: $isHovered
         )
+        .onHover { hovering in
+            isHovered = hovering
+        }
     }
 }
 
@@ -478,6 +467,9 @@ struct DisplayOptionsSection: View {
                     Spacer()
                     Toggle("", isOn: $settings.showTimeDifference)
                         .toggleStyle(.switch)
+                        .onChange(of: settings.showTimeDifference) { oldValue, newValue in
+                            handleTimeDifferenceToggle(newValue)
+                        }
                 }
             }
             .padding()
@@ -490,6 +482,23 @@ struct DisplayOptionsSection: View {
             .padding(.horizontal, 12)
         }
     }
+
+    private func handleTimeDifferenceToggle(_ isEnabled: Bool) {
+        if isEnabled {
+            // 添加时差组件到之前保存的位置
+            if !settings.componentOrder.contains(.timeDifference) {
+                // 确保索引在有效范围内
+                let targetIndex = min(settings.timeDifferenceLastIndex, settings.componentOrder.count)
+                settings.componentOrder.insert(.timeDifference, at: targetIndex)
+            }
+        } else {
+            // 删除时差组件，但保存其位置
+            if let index = settings.componentOrder.firstIndex(of: .timeDifference) {
+                settings.timeDifferenceLastIndex = index
+                settings.componentOrder.remove(at: index)
+            }
+        }
+    }
 }
 
 // --- 可拖拽的组件卡片视图 ---
@@ -498,24 +507,47 @@ struct ComponentDragDropView: View {
     let isBeingDragged: Bool
     let onDragChange: (Bool) -> Void
     @ObservedObject var settings: UserSettings
+    @Binding var isHovered: Bool
+
+    private var backgroundColor: Color {
+        if isBeingDragged {
+            return Color.blue.opacity(0.3)
+        } else if isHovered {
+            return Color.gray.opacity(0.15)
+        } else {
+            return Color(NSColor.textBackgroundColor)
+        }
+    }
+
+    private var borderColor: Color {
+        if isBeingDragged {
+            return Color.blue.opacity(0.6)
+        } else if isHovered {
+            return Color.gray.opacity(0.4)
+        } else {
+            return Color.gray.opacity(0.2)
+        }
+    }
 
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 1) {
             componentPreviewText
-                .font(.system(.body, design: .monospaced))
+                .font(.system(size: 15, weight: .regular, design: .monospaced))
                 .foregroundColor(.primary)
+                .lineLimit(1)
 
             Text(component.displayName)
-                .font(.caption2)
+                .font(.system(size: 8, weight: .regular))
                 .foregroundColor(.secondary)
                 .lineLimit(1)
         }
-        .frame(maxWidth: .infinity)
-        .padding(8)
-        .background(isBeingDragged ? Color.blue.opacity(0.2) : Color(NSColor.textBackgroundColor))
-        .cornerRadius(6)
-        .border(Color.gray.opacity(0.2), width: 1)
-        .opacity(isBeingDragged ? 0.7 : 1.0)
+        .frame(width: 115, height: 80)
+        .background(backgroundColor)
+        .cornerRadius(4)
+        .border(borderColor, width: 0.5)
+        .opacity(isBeingDragged ? 0.8 : 1.0)
+        .animation(.easeInOut(duration: 0.15), value: isHovered)
+        .animation(.easeInOut(duration: 0.15), value: isBeingDragged)
         .onDrag {
             onDragChange(true)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -580,3 +612,7 @@ struct ComponentDropDelegate: DropDelegate {
     }
 }
 
+#Preview {
+    SettingsView(settings: UserSettings())
+        .frame(width: 700, height: 400)
+}
